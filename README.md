@@ -1,3 +1,5 @@
 # adamissigma
 adam is sigma :D
-a
+## skibidi
+* CHANGELOG
+ - Adam is skibidier than ever
