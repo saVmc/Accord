@@ -57,3 +57,9 @@ Drop your skibidi ideas, PRs, or memes. All sigma bros and sisters welcome. If y
 ## License
 
 MIT License, because sigma is for everyone. Skibidi on!
+
+
+
+
+
+note: this entire thing was written by copilot ai
