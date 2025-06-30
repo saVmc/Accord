@@ -1,8 +1,18 @@
 # adamissigma
 
-adam is sigma :D
+```
+    /\
+     /  \
+    / /\ \
+   / /  \ \
+  /_/____\_\
+  |  o  o  |
+  |   ∆    |   <--- adam is sigma
+  |  \__/  |
+   \______/
+```
 
-## Table of Contents
+## Table of Skibidi
 
 - [About](#about)
 - [Features](#features)
@@ -14,17 +24,17 @@ adam is sigma :D
 
 ## About
 
-**adamissigma** is a fun and lighthearted project celebrating Adam's sigma qualities. This repository is meant for demonstration and entertainment purposes.
+**adamissigma** is the giga-skibidi-bop-bop-bop project where Adam flexes his sigma-ness to the max. This repo is for pure fun, memes, and sigma energy. If you’re not ready for the sigma, turn back now 🚀.
 
 ## Features
 
-- Showcases Adam's sigma status
-- Regular updates to keep things skibidi
-- Easy to use and extend
+- Adam is so sigma, even the code is intimidated
+- Skibidi updates keep the vibes ultra-fresh
+- Plug and play, no instructions needed, just pure sigma
 
 ## Installation
 
-Clone the repository:
+Clone the skibidi-repo:
 
 ```bash
 git clone https://github.com/yourusername/adamissigma.git
@@ -33,16 +43,17 @@ cd adamissigma
 
 ## Usage
 
-Open the project in your favorite editor and enjoy the sigma experience!
+Open in your fav code cave, let the sigma flow through you, and become giga-chad. Skibidi your way to greatness!
 
 ## Changelog
 
-- Adam is skibidier than ever
+- Adam reached ultra-skibidi mode
+- Sigma levels off the charts
 
 ## Contributing
 
-Contributions are welcome! Please open an issue or submit a pull request for any improvements or suggestions.
+Drop your skibidi ideas, PRs, or memes. All sigma bros and sisters welcome. If you’re not sigma, you will be after contributing.
 
 ## License
 
-This project is licensed under the MIT License.
+MIT License, because sigma is for everyone. Skibidi on!
