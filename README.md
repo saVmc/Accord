@@ -62,4 +62,4 @@ MIT License, because sigma is for everyone. Skibidi on!
 
 
 
-note: this entire thing was written by copilot ai
+## note: this entire thing was written by copilot ai
