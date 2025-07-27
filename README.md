@@ -1,65 +1,119 @@
-# adamissigma
+# Accord – A Social Networking App for Students
 
-```
-      /\
-     /  \
-    / /\ \
-   / /  \ \
-  /_/____\_\
-  |  o  o  |
-  |   ∆    |   <--- adam is sigma
-  |  \__/  |
-   \______/
-```
+## Table of Contents
 
-## Table of Skibidi
+- [Part 1 – Project Definition and Requirements](#part-1--project-definition-and-requirements)
+  - [Project Overview](#project-overview)
+  - [Functional Requirements](#functional-requirements)
+  - [Non-Functional Requirements](#non-functional-requirements)
+  - [Project Status](#project-status)
+  - [Developer Notes](#developer-notes)
+- [Part 2 – Design and Wireframes](#part-2--design-and-wireframes)
+- [Part 3 – Implementation and Codebase](#part-3--implementation-and-codebase)
+- [Part 4 – Testing and Evaluation](#part-4--testing-and-evaluation)
+- [Part 5 – Future Improvements](#part-5--future-improvements)
 
-- [About](#about)
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Changelog](#changelog)
-- [Contributing](#contributing)
-- [License](#license)
+---
 
-## About
+## Part 1 – Project Definition and Requirements
 
-**adamissigma** is the giga-skibidi-bop-bop-bop project where Adam flexes his sigma-ness to the max. This repo is for pure fun, memes, and sigma energy. If you’re not ready for the sigma, turn back now 🚀.
+### Project Overview
 
-## Features
+Accord is a cross-platform social networking and productivity app designed specifically for students, schools, and educational institutions. It is inspired by the best of both Google Classroom and Discord, merging instant messaging, assignment submission, and time management into one single, mega-intuitive interface.
 
-- Adam is so sigma, even the code is intimidated
-- Skibidi updates keep the vibes ultra-fresh
-- Plug and play, no instructions needed, just pure sigma
+Accord helps students communicate, collaborate, and stay organized—all within a secure and moderated environment tailored to meet the needs of education in 2025. Through its real-time messaging system, students can easily engage in class discussions, form study groups and calls, and share ideas freely, while teachers retain control over message visibility and moderation to ensure a respectful and focused learning space.
 
-## Installation
+---
 
-Clone the skibidi-repo:
+### Functional Requirements
 
-```bash
-git clone https://github.com/yourusername/adamissigma.git
-cd adamissigma
-```
+These are the core features and capabilities of Accord:
 
-## Usage
+#### User Authentication
+- Students and teachers can sign up and log in securely.
+- Role-based access (student vs teacher) determines available features.
 
-Open in your fav code cave, let the sigma flow through you, and become giga-chad. Skibidi your way to greatness!
+#### Messaging System
+- Real-time chat between students.
+- Teachers can moderate or restrict messages.
+- Group channels for classes or subjects.
 
-## Changelog
+#### Assignment Submission
+- Students can upload homework and assignments.
+- Teachers can view, comment on, and mark submissions.
 
-- Adam reached ultra-skibidi mode
-- Sigma levels off the charts
+#### Interactive Timetable
+- Students can view their class schedule.
+- Timetable updates dynamically based on school input.
 
-## Contributing
+#### Customisation Options
+- Users can change their profile picture.
+- Users can select background colours and themes.
 
-Drop your skibidi ideas, PRs, or memes. All sigma bros and sisters welcome. If you’re not sigma, you will be after contributing.
+#### Notifications
+- Alerts for new messages, upcoming deadlines, and timetable changes.
 
-## License
+#### Navigation
+- Bottom navigation bar for easy access to key sections (Chat, Timetable, Assignments, Settings).
 
-MIT License, because sigma is for everyone. Skibidi on!
+---
 
+### Non-Functional Requirements
 
+These define the quality attributes and design expectations:
 
+#### User Interface Design
+- Clean, minimal layout with intuitive navigation.
+- Consistent colour scheme: navy blue and grey by default.
+- Responsive design for mobile, tablet, and desktop devices.
 
+#### Performance
+- Fast load times and smooth transitions between screens.
+- Real-time messaging with minimal latency.
 
-## note: this entire thing was written by copilot ai
+#### Scalability
+- Capable of supporting multiple schools and hundreds of users.
+
+#### Security
+- Secure login and data encryption for user privacy.
+- Teacher moderation tools to prevent misuse.
+
+#### Accessibility
+- Designed to be usable by students of all abilities.
+- Adjustable text size and colour contrast options.
+
+#### Customisability
+- Personalised themes and profile settings.
+- Optional notification preferences.
+
+#### Reliability
+- Stable performance with minimal crashes or bugs.
+- Offline access to timetable and previously downloaded assignments.
+
+---
+
+### Project Status
+
+This README will be updated regularly as development progresses. Stay tuned for new features, design updates, and implementation notes.
+
+---
+
+### Developer Notes
+
+This project is being developed as part of a school assignment. Scope and deliverables may be refined based on feedback and available time. Mr Clark will provide guidance on project feasibility and milestones.
+
+---
+
+## Part 2 – Design and Wireframes
+
+---
+
+## Part 3 – Implementation and Codebase
+
+---
+
+## Part 4 – Testing and Evaluation
+
+---
+
+## Part 5 – Future Improvements
