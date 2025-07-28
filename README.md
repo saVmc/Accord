@@ -1,6 +1,6 @@
 # Accord – A Social Networking App for Students
 
-## Table of Contents
+## Table of Contents!
 
 - [Part 1 – Project Definition and Requirements](#part-1--project-definition-and-requirements)
   - [Project Overview](#project-overview)
