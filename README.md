@@ -106,6 +106,9 @@ This project is being developed as part of a school assignment. Scope and delive
 
 ## Part 2 – Design and Wireframes
 
+![screenshot](media/accordfigma1.png)
+
+
 ---
 
 ## Part 3 – Implementation and Codebase
