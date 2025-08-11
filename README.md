@@ -94,14 +94,13 @@ These define the quality attributes and design expectations:
 
 ### Project Status
 
-This README will be updated regularly as development progresses. Stay tuned for new features, design updates, and implementation notes.
+This README will be updated regularly as development progresses. Stay tuned for new features, design updates, and more.
 
 ---
 
 ### Developer Notes
 
-This project is being developed as part of a school assignment. Scope and deliverables may be refined based on feedback and available time. Mr Clark will provide guidance on project feasibility and milestones.
-
+Hi
 ---
 
 ## Part 2 – Design and Wireframes
