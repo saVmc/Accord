@@ -56,20 +56,20 @@ Accord helps students communicate, collaborate, and stay organized—all within 
 ---
 
 ### Scope (what I really want to work)
-✅ Login & roles  
-✅ Class-based real-time messaging  
-✅ Assignment submission + marking  
-✅ View-only timetable with updates  
-✅ Profile basics (avatar, theme, notifications)  
+- Login & roles  
+- Class-based real-time messaging  
+- Assignment submission + marking  
+- View-only timetable with updates  
+- Profile basics (avatar, theme, notifications)  
 
 ### Out of Scope (what would be sick but aint no way)
-❌ Voice/video calls  
-❌ AI assistant??
-❌ Parent/guardian portals for things like permission notes etc
+- Voice/video calls  
+- AI assistant??
+- Parent/guardian portals for things like permission notes etc
 
 ### Developer Notes
 
-Hi
+Hi 👋
 ---
 
 ## Part 2 – Design and Wireframes
@@ -117,8 +117,40 @@ Hi
 
 ---
 
-## Part 4 – Testing and Evaluation
+## Part 4 - Designing algorithms
+
+### Feature im trying to figure out
+**Login & Role-Based Access!** (Student/Teacher)
 
 ---
+
+### Simple Algorithm for this 
+1. User opens login screen  
+2. Enter email + password  
+3. Check email format  
+   - Invalid → error message → stop  
+4. Search database for email  
+   - Not found → error message → stop  
+5. Compare entered password (encrypted) with stored encrypted password  
+   - No match → error message → stop  
+6. If match → start session and check role:  
+   - Teacher → Teacher Home/Dashboard  
+   - Student → Student Home  
+
+**Complexity:**  
+Might be fast enough for like a couple users? the system stops early on invalid details and only checks one account at a time though, not very efficient or 
+
+### Test Cases　:D
+based off of my test feature
+
+| Test Case ID | Scenario | Input Data | Expected Result |
+|--------------|----------|------------|-----------------|
+| TC-1 | Correct login (student) | Valid student email + correct password | Student logged in → Student Home |
+| TC-2 | Wrong password (teacher) | Valid teacher email + wrong password | Error: “Incorrect password” |
+| TC-3 | Invalid email format | `teacher@@school.com`, any password | Error: “Invalid email format” |
+| TC-4 | Email not found | `newuser@school.com`, any password | Error: “Account not found” |
+
+---
+
 
 ## Part 5 – Future Improvements
