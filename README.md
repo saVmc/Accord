@@ -55,11 +55,17 @@ Accord helps students communicate, collaborate, and stay organized—all within 
 
 ---
 
-### Project Status
+### Scope (what I really want to work)
+✅ Login & roles  
+✅ Class-based real-time messaging  
+✅ Assignment submission + marking  
+✅ View-only timetable with updates  
+✅ Profile basics (avatar, theme, notifications)  
 
-This README will be updated regularly as development progresses. Stay tuned for new features, design updates, and more.
-
----
+### Out of Scope (what would be sick but aint no way)
+❌ Voice/video calls  
+❌ AI assistant??
+❌ Parent/guardian portals for things like permission notes etc
 
 ### Developer Notes
 
@@ -70,10 +76,44 @@ Hi
 
 ![screenshot](media/accordfigma1.png)
 
+**Key Annotations:**
+- **Navigation** – Bottom bar with Chat, Timetable, Assignments, for super-friendly mobile use  
+- **Timetable** – Timetable list → nice colours and organised
+- **Login Page** – Simple options → clean buttons
 
 ---
 
-## Part 3 – Implementation and Codebase
+### Visual Design Choices
+| Element        | Choice                                | Reason |
+|----------------|---------------------------------------|--------|
+| Primary Colour | Navy (#0A1F44)                        | Professional, doesn't hurt to look at |
+| Secondary      | White (#FFFFFF)                 | Looks great against navy |
+| Accent         | Green (#1DB954)                        | helps to draw attention to active items |
+| Font           | Inter (Headings & Body)                | Clean, modern |
+| Icons          | Nice line icons             | Simplicity and consistency |
+
+---
+
+## Part 3 – Alternative Design and User Flow
+
+### Alternate Design (Figma :o )
+![User Flow – Alternative](media/accordfigma-alt.png)
+
+**Changes in Alt Design:**
+- Beige background for softer look  
+- Maroon accent colour instead of blue  
+- Serif headings (Cormorant Garamond) for a different style, feels fancier and more academic  
+- Intergrated navigation bar instead of bottom bar  
+
+---
+
+### Updated Design
+| Element     | Choice              |
+|-------------|---------------------|
+| Logo        | Fancier “A” mark with text   |
+| Secondary   | Just fancier A           |
+| Palette     | Maroon, Beige, White, Black |
+| Typography  | Verdana (UI), Cormorant Garamond (Headings) |
 
 ---
 
