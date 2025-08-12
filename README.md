@@ -21,74 +21,37 @@
 
 Accord is a cross-platform social networking and productivity app designed specifically for students, schools, and educational institutions. It is inspired by the best of both Google Classroom and Discord, merging instant messaging, assignment submission, and time management into one single, mega-intuitive interface.
 
-Accord helps students communicate, collaborate, and stay organized—all within a secure and moderated environment tailored to meet the needs of education in 2025. Through its real-time messaging system, students can easily engage in class discussions, form study groups and calls, and share ideas freely, while teachers retain control over message visibility and moderation to ensure a respectful and focused learning space.
+Accord helps students communicate, collaborate, and stay organized—all within a secure and moderated environment tailored to meet the needs of education in 2025. Through its real-time messaging system, students can easily engage in class discussions, form study groups and calls, and share ideas freely, while teachers are still in control over message visibility and moderation.
 
 ---
 
 ### Functional Requirements
-
-These are the core features and capabilities of Accord:
-
-#### User Authentication
-- Students and teachers can sign up and log in securely.
-- Role-based access (student vs teacher) determines available features.
-
-#### Messaging System
-- Real-time chat between students.
-- Teachers can moderate or restrict messages.
-- Group channels for classes or subjects.
-
-#### Assignment Submission
-- Students can upload homework and assignments.
-- Teachers can view, comment on, and mark submissions.
-
-#### Interactive Timetable
-- Students can view their class schedule.
-- Timetable updates dynamically based on school input.
-
-#### Customisation Options
-- Users can change their profile picture.
-- Users can select background colours and themes.
-
-#### Notifications
-- Alerts for new messages, upcoming deadlines, and timetable changes.
-
-#### Navigation
-- Bottom navigation bar for easy access to key sections (Chat, Timetable, Assignments, Settings).
+- **User Authentication**
+  - Secure login and signup  
+  - Role-based access (Student [with sub roles] / Teacher )
+- **Messaging**
+  - Real-time chat channels per class or subject  
+  - Teacher moderation and message controls
+- **Assignments**
+  - Student file submissions  
+  - Teacher viewing, feedback, and marking
+- **Timetable**
+  - Dynamic school-provided schedule  
+  - Offline access to cached timetable
+- **Profile & Settings**
+  - Avatar upload, theme choice, notification preferences
+- **Notifications**
+  - Alerts for new messages, deadlines, and timetable changes
 
 ---
 
 ### Non-Functional Requirements
-
-These define the quality attributes and design expectations:
-
-#### User Interface Design
-- Clean, minimal layout with intuitive navigation.
-- Consistent colour scheme: navy blue and grey by default.
-- Responsive design for mobile, tablet, and desktop devices.
-
-#### Performance
-- Fast load times and smooth transitions between screens.
-- Real-time messaging with minimal latency.
-
-#### Scalability
-- Capable of supporting multiple schools and hundreds of users.
-
-#### Security
-- Secure login and data encryption for user privacy.
-- Teacher moderation tools to prevent misuse.
-
-#### Accessibility
-- Designed to be usable by students of all abilities.
-- Adjustable text size and colour contrast options.
-
-#### Customisability
-- Personalised themes and profile settings.
-- Optional notification preferences.
-
-#### Reliability
-- Stable performance with minimal crashes or bugs.
-- Offline access to timetable and previously downloaded assignments.
+- **Interface** – Clean, minimal layout; consistent colour scheme (navy blue, grey, white accents); responsive on mobile, tablet, desktop.  
+- **Performance** – Fast loading, smooth screen changes, low-latency messaging.  
+- **Security** – Encrypted login/data, sensible permissions.  
+- **Accessibility** – Adjustable text size, high-contrast mode.  
+- **Reliability** – Stable performance, offline access to timetable and past assignments.  
+- **Scalability** – Handles multiple schools and hundreds of users.
 
 ---
 
