@@ -140,7 +140,7 @@ Hi 👋
 **Complexity:**  
 Might be fast enough for like a couple users? the system stops early on invalid details and only checks one account at a time though, not very efficient or 
 
-### Test Cases　:D
+### Test Cases :D
 based off of my test feature
 
 | Test Case ID | Scenario | Input Data | Expected Result |
