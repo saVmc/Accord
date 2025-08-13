@@ -135,7 +135,13 @@ Hi 👋
    - No match → error message → stop  
 6. If match → start session and check role:  
    - Teacher → Teacher Home/Dashboard  
-   - Student → Student Home  
+   - Student → Student Home
+  
+
+
+  **Flow Chart:**  
+  ![Login Flowchart](media/login_flowchart.png)
+
 
 **Complexity:**  
 Might be fast enough for like a couple users? the system stops early on invalid details and only checks one account at a time though, not very efficient or 
