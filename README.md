@@ -135,20 +135,29 @@ Hi 👋
    - No match → error message → stop  
 6. If match → start session and check role:  
    - Teacher → Teacher Home/Dashboard  
-   - Student → Student Home  
+   - Student → Student Home
+  
+
+
+  **Flow Chart:**  
+  ![Login Flowchart](media/login_flowchart.png)
+
 
 **Complexity:**  
 Might be fast enough for like a couple users? the system stops early on invalid details and only checks one account at a time though, not very efficient or 
 
-### Test Cases　:D
+### Test Cases :D
 based off of my test feature
 
-| Test Case ID | Scenario | Input Data | Expected Result |
-|--------------|----------|------------|-----------------|
-| TC-1 | Correct login (student) | Valid student email + correct password | Student logged in → Student Home |
-| TC-2 | Wrong password (teacher) | Valid teacher email + wrong password | Error: “Incorrect password” |
-| TC-3 | Invalid email format | `teacher@@school.com`, any password | Error: “Invalid email format” |
-| TC-4 | Email not found | `newuser@school.com`, any password | Error: “Account not found” |
+### Test Cases
+
+| Test Case ID | Test Case Name              | Preconditions | Test Steps | Expected Result | Actual Result | Pass/Fail | Priority |
+|--------------|-----------------------------|---------------|------------|-----------------|---------------|-----------|----------|
+| TC-1 | Correct Login (Student) | Student account exists in DB; correct email/password are known | 1. Open login page<br>2. Enter valid student email and correct password<br>3. Click "Login" | Student is logged in and redirected to Student Home | _N/A_ | _N/A_ | High |
+| TC-2 | Wrong Password (Teacher) | Teacher account exists in DB; correct email known, incorrect password will be entered | 1. Open login page<br>2. Enter valid teacher email and incorrect password<br>3. Click "Login" | Error: “Incorrect password” is displayed; login fails | _N/A_ | _N/A_ | High |
+| TC-3 | Invalid Email Format | None (rejected before even looked in the DB) | 1. Open login page<br>2. Enter `teacher@@school.com` and any password<br>3. Click "Login" | Error: “Invalid email format” is displayed | _N/A_ | _N/A_ | Medium |
+| TC-4 | Email Not Found | Email isnt in DB | 1. Open login page<br>2. Enter `newuser@school.com` and any password<br>3. Click "Login" | Error: “Account not found” is displayed | _N/A_ | _N/A_ | Medium |
+
 
 ---
 
