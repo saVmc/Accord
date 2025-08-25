@@ -3,15 +3,11 @@
 ## Table of Contents!
 
 - [Part 1 – Project Definition and Requirements](#part-1--project-definition-and-requirements)
-  - [Project Overview](#project-overview)
-  - [Functional Requirements](#functional-requirements)
-  - [Non-Functional Requirements](#non-functional-requirements)
-  - [Project Status](#project-status)
-  - [Developer Notes](#developer-notes)
 - [Part 2 – Design and Wireframes](#part-2--design-and-wireframes)
-- [Part 3 – Implementation and Codebase](#part-3--implementation-and-codebase)
-- [Part 4 – Testing and Evaluation](#part-4--testing-and-evaluation)
-- [Part 5 – Future Improvements](#part-5--future-improvements)
+- [Part 3 – Alternative Design and User Flow](#part-3--alternative-design-and-user-flow)
+- [Part 4 – Designing algorithms](#part-4---designing-algorithms)
+- [Part 5 – Setting up for the joys of SQL](#part-5--setting-up-for-the-joys-of-sql)
+
 
 ---
 
@@ -162,4 +158,60 @@ based off of my test feature
 ---
 
 
-## Part 5 – Future Improvements
+
+## Part 5 – Setting up for the joys of SQL
+
+### 1 – Student submissions
+```sql
+SELECT u.name AS student,
+       a.title AS assignment,
+       s.grade,
+       s.feedback
+FROM submissions s
+JOIN users u ON s.studentID = u.userID
+JOIN assignments a ON s.assignmentID = a.assignmentID
+ORDER BY u.name;
+```
+
+---
+
+### 2 - Finding all ungraded assignments
+```sql
+SELECT u.name AS student,
+       a.title AS assignment,
+       s.fileLink,
+       s.grade
+FROM submissions s
+JOIN users u ON s.studentID = u.userID
+JOIN assignments a ON s.assignmentID = a.assignmentID
+WHERE s.grade IS NULL
+ORDER BY a.dueDate;
+```
+
+---
+
+### 3 – Show all users
+```sql
+SELECT userID, name, email, role
+FROM users
+ORDER BY role, name;
+```
+
+---
+
+### 4 – Show all messages in a specific channel
+```sql
+SELECT messageID, senderID, content, timestamp
+FROM messages
+WHERE channel = 'math10a'
+ORDER BY timestamp DESC;
+```
+
+---
+
+### 5 – Show the timetable
+```sql
+SELECT subject, dayOfWeek, startTime, endTime, teacherID
+FROM timetable
+ORDER BY dayOfWeek, startTime;
+```
