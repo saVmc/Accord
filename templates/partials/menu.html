@@ -1,9 +1,13 @@
 <nav>
-  <img src="static\images\logo.png" alt="VSCode Extensions site logo." />
-  <h1>VSCode Extensions</h1>
+  <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Accord Logo" />
+  <h1>Accord</h1>
   <ul class="topnav">
-    <li><a href="#">Home</a></li>
-    <li><a href="add.html">Add me</a></li>
-    <li><a href="about.html">About</a></li>
+    <li><a href="{{ url_for('index') }}">Home</a></li>
+    {% if session.get("user") %}
+      <li><a href="{{ url_for('logout') }}">Logout</a></li>
+    {% else %}
+      <li><a href="{{ url_for('login') }}">Login</a></li>
+      <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+    {% endif %}
   </ul>
 </nav>

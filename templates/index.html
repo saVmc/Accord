@@ -1,17 +1,13 @@
-{% extends 'layout.html' %} {% block content %}
-<div class="container"></div>
-{% endblock %}
-{% for row in content %}
-<div class="card">
-  <img
-    class="card-image"
-    src="{{ row[4] }}"
-    alt="Product image for the {{ row[1] }} VSCode extension."
-  />
-  <h1 class="card-name">{{ row[1] }}</h1>
-  <p class="card-about">{{ row[3] }}</p>
-  <a class="card-link" href="{{ row[2] }}"
-    ><button class="btn">Read More</button></a
-  >
+{% extends "layout.html" %}
+{% block content %}
+<div class="container">
+  {% if user %}
+    <h1>Welcome back, {{ user.name }}!</h1>
+    <p>You are logged in as <b>{{ user.role }}</b> ({{ user.email }})</p>
+    <a href="{{ url_for('logout') }}"><button class="btn">Logout</button></a>
+  {% else %}
+    <h1>Welcome to Accord</h1>
+    <p>Please <a href="{{ url_for('login') }}">Login</a> or <a href="{{ url_for('signup') }}">Sign Up</a></p>
+  {% endif %}
 </div>
-{% endfor %}
+{% endblock %}
