@@ -51,3 +51,20 @@ CREATE TABLE timetable (
     endTime      TIME NOT NULL,
     FOREIGN KEY (teacherID) REFERENCES users(userID)
 );
+
+CREATE TABLE classes (
+    classID     INTEGER PRIMARY KEY AUTOINCREMENT,
+    className   TEXT NOT NULL,
+    code        TEXT NOT NULL UNIQUE, -- random join code
+    teacherID   INTEGER NOT NULL,
+    FOREIGN KEY (teacherID) REFERENCES users(userID)
+);
+
+-- Enrollments (links students to classes)
+CREATE TABLE enrollments (
+    enrollmentID INTEGER PRIMARY KEY AUTOINCREMENT,
+    classID      INTEGER NOT NULL,
+    studentID    INTEGER NOT NULL,
+    FOREIGN KEY (classID) REFERENCES classes(classID),
+    FOREIGN KEY (studentID) REFERENCES users(userID)
+);

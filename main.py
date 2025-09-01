@@ -58,3 +58,46 @@ def logout():
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
+
+# Teacher creates a class
+@app.route("/create_class", methods=["GET", "POST"])
+def create_class():
+    if "user" not in session or session["user"]["role"] != "teacher":
+        flash("Only teachers can create classes.", "danger")
+        return redirect(url_for("index"))
+
+    if request.method == "POST":
+        className = request.form["className"]
+        code = dbHandler.create_class(className, session["user"]["id"])
+        flash(f"Class created! Share this code with students: {code}", "success")
+        return redirect(url_for("my_classes"))
+
+    return render_template("create_class.html")
+
+# Student joins class with a code
+@app.route("/join_class", methods=["GET", "POST"])
+def join_class():
+    if "user" not in session or session["user"]["role"] != "student":
+        flash("Only students can join classes.", "danger")
+        return redirect(url_for("index"))
+
+    if request.method == "POST":
+        code = request.form["classCode"].upper()
+        c = dbHandler.get_class_by_code(code)
+        if c:
+            dbHandler.enroll_student(c[0], session["user"]["id"])
+            flash(f"Joined class {c[1]}!", "success")
+            return redirect(url_for("my_classes"))
+        else:
+            flash("Invalid class code.", "danger")
+
+    return render_template("join_class.html")
+
+# Show all classes for the logged-in user
+@app.route("/my_classes")
+def my_classes():
+    if "user" not in session:
+        return redirect(url_for("login"))
+    
+    classes = dbHandler.list_classes_for_user(session["user"]["id"], session["user"]["role"])
+    return render_template("my_classes.html", classes=classes, user=session["user"])

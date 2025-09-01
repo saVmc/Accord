@@ -10,9 +10,12 @@
     <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.png') }}" />
   </head>
 
-  <body>
-    <main>
-      {% include "partials/menu.html" %}
+  <body class="bg-[#0f2034] min-h-screen">
+    <main class="min-h-screen">
+      {% if not hide_menu %}
+        {% include "partials/menu.html" %}
+      {% endif %}
+
       {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
           <ul class="flashes">
@@ -22,6 +25,7 @@
           </ul>
         {% endif %}
       {% endwith %}
+
       {% block content %}{% endblock %}
     </main>
   </body>
