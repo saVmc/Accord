@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="page">
+  <div class="page-header">
+    <h1>{{ class_row[1] }}</h1>
+    <p class="muted">Code: {{ class_row[2] }}</p>
+  </div>
+
+  <div class="card">
+    <h3>Teacher</h3>
+    <p>{{ teacher[1] }} ({{ teacher[2] }})</p>
+  </div>
+
+  <div class="card">
+    <h3>Students</h3>
+    {% if students %}
+      <ul>
+        {% for s in students %}
+          <li>{{ s[1] }} — {{ s[2] }}</li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="muted">No students enrolled yet.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -81,7 +81,6 @@ nav h1 {
   padding: 0.75rem 2rem;
 }
 
-/* Buttons */
 .btn {
   border: none;
   border-radius: 5px;
@@ -99,7 +98,6 @@ nav h1 {
   color: #0f2034;
 }
 
-/* Features Section */
 .features {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
@@ -114,6 +112,7 @@ nav h1 {
   text-align: center;
 }
 
+
 .feature-card h2 {
   margin-bottom: 1rem;
   color: #14e6dd;
@@ -123,7 +122,6 @@ nav h1 {
   color: #e5e7eb;
 }
 
-/* Forms */
 .form-container {
   max-width: 400px;
   margin: 3rem auto;
@@ -151,3 +149,21 @@ nav h1 {
 .form-container button {
   width: 100%;
 }
+
+.center-screen { height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; }
+.card { background: #1a2b44; padding: 2rem; border-radius: 12px; width: 100%; max-width: 440px; color: #fff; }
+.card h2 { margin-bottom: 1rem; }
+.card input, .card select { width: 100%; padding: 0.75rem; border-radius: 8px; border: 1px solid #334155; background: #0f2034; color: #fff; margin-bottom: 1rem; }
+.btn { display:inline-block; padding: 0.6rem 1rem; background: #14e6dd; color: #0f2034; border-radius: 8px; text-decoration: none; font-weight: 700; }
+.btn.ghost { background: transparent; border: 1px solid rgba(255,255,255,0.12); color: #fff; padding: 0.4rem 0.8rem; }
+.muted { color: #cbd5e1; }
+.page { padding: 2rem; max-width: 1100px; margin: auto; color: #fff; }
+.page-header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1.25rem; }
+.grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap:1rem; }
+.class-card { background:#122033; padding:1rem; border-radius:10px; }
+.flash-container { position: fixed; top: 1rem; left: 50%; transform: translateX(-50%); width: calc(100% - 2rem); max-width: 900px; z-index: 100; }
+.flash { padding: 0.75rem 1rem; border-radius: 8px; margin-bottom: 0.5rem; color: #0f2034; background: #fff; font-weight:600; }
+.flash.success { background: #bbf7d0; }
+.flash.danger { background: #fecaca; }
+.flash.warning { background: #fde68a; }
+.flash.info { background: #bfdbfe; color: #062c4b; }

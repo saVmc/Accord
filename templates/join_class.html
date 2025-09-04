@@ -1,0 +1,13 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="center-screen">
+  <div class="card">
+    <h2>Join Class</h2>
+    <form method="POST">
+      <label>Class Code</label>
+      <input name="code" type="text" required />
+      <button class="btn" type="submit">Join</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

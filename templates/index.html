@@ -1,13 +1,19 @@
 {% extends "layout.html" %}
 {% block content %}
-<div class="container">
+<div class="hero">
+  <h1>Welcome to Accord</h1>
+  <p class="muted">A simple classroom platform. All intergrated. All in one.</p>
+  <p class="saVmc">by <strong>saVmc</strong></p>
   {% if user %}
-    <h1>Welcome back, {{ user.name }}!</h1>
-    <p>You are logged in as <b>{{ user.role }}</b> ({{ user.email }})</p>
-    <a href="{{ url_for('logout') }}"><button class="btn">Logout</button></a>
+    <div class="center">
+      <p>Signed in as <strong>{{ user.name }}</strong> ({{ user.role }})</p>
+      <a class="btn" href="{{ url_for('classes') }}">My Classes</a>
+    </div>
   {% else %}
-    <h1>Welcome to Accord</h1>
-    <p>Please <a href="{{ url_for('login') }}">Login</a> or <a href="{{ url_for('signup') }}">Sign Up</a></p>
+    <div class="center">
+      <a class="btn" href="{{ url_for('signup') }}">Get Started</a>
+      <a class="btn ghost" href="{{ url_for('login') }}">Log In</a>
+    </div>
   {% endif %}
 </div>
 {% endblock %}

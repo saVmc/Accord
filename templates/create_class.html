@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="center-screen">
+  <div class="card">
+    <h2>Create Class</h2>
+    <form method="POST">
+      <label>Class name</label>
+      <input name="class_name" type="text" required />
+      <button class="btn" type="submit">Create</button>
+    </form>
+    <p class="muted">After creating, share the code shown on the Classes page.</p>
+  </div>
+</div>
+{% endblock %}

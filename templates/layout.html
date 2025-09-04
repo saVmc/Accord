@@ -1,28 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self';" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
-    <title>Accord</title>
-    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.png') }}" />
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}" />
+    <title>Accord - All in one.</title>
   </head>
-
   <body class="bg-[#0f2034] min-h-screen">
-    <main class="min-h-screen">
-      {% if not hide_menu %}
-        {% include "partials/menu.html" %}
-      {% endif %}
-
+    <main>
+      {% include "partials/menu.html" %}
       {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
-          <ul class="flashes">
-          {% for category, message in messages %}
-            <li class="flash {{ category }}">{{ message }}</li>
-          {% endfor %}
-          </ul>
+          <div class="flash-container">
+            {% for category, message in messages %}
+              <div class="flash {{ category }}">{{ message }}</div>
+            {% endfor %}
+          </div>
         {% endif %}
       {% endwith %}
 
