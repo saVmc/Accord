@@ -1,0 +1,24 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="form-container">
+  <h2>Profile Settings</h2>
+
+  <div class="card" style="margin-bottom:1rem;">
+    <p><strong>Current Name:</strong> {{ user.name }}</p>
+    <p><strong>Current Email:</strong> {{ user.email }}</p>
+  </div>
+
+  <form method="post">
+    <label for="name">Change Name</label>
+    <input id="name" type="text" name="name" value="{{ user.name }}" />
+
+    <label for="email">Change Email</label>
+    <input id="email" type="email" name="email" value="{{ user.email }}" />
+
+    <label for="password">Change Password</label>
+    <input id="password" type="password" name="password" placeholder="New password" />
+
+    <button class="btn">Save Changes</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="form-container">
+  <h2>Edit Class</h2>
+  <form method="post">
+    <label>Class Name</label>
+    <input type="text" name="className" value="{{ class_data[1] }}" required />
+
+    <label>Description</label>
+    <textarea name="description" rows="4">{{ class_data[4] }}</textarea>
+
+    <button class="btn">Save Changes</button>
+  </form>
+</div>
+{% endblock %}

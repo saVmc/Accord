@@ -8,6 +8,7 @@
     <li><a href="{{ url_for('index') }}">Home</a></li>
     {% if session.get('user') %}
       <li><a href="{{ url_for('classes') }}">Classes</a></li>
+      <li><a href="{{ url_for('settings') }}">Settings</a></li>
       <li><a href="{{ url_for('logout') }}">Logout</a></li>
     {% else %}
       <li><a href="{{ url_for('login') }}">Login</a></li>
