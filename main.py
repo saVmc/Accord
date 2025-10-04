@@ -315,6 +315,28 @@ def grade_submission(submission_id):
     return redirect(request.referrer or url_for("classes"))
 
 # --- DMs AND GROUP CHATS ---
+@app.route("/start_dm/<int:user_id>")
+def start_dm(user_id):
+    user = logged_in_user()
+    if not user:
+        flash("Please log in", "warning")
+        return redirect(url_for("login"))
+
+    if user["id"] == user_id:
+        flash("Cannot message yourself", "warning")
+        return redirect(url_for("inbox"))
+
+    # Check if a DM thread already exists between these two users
+    thread_id = db.get_dm_thread_between_users(user["id"], user_id)
+    if not thread_id:
+        # Get the other user's name
+        other_user = db.get_user_by_id(user_id)
+        thread_name = f"{user['name']} & {other_user[1]}"  # Assuming [1] is name
+        # Create new DM thread with a proper name
+        thread_id = db.create_dm_thread([user["id"], user_id], isGroup=False, threadName=thread_name, createdBy=user["id"])
+
+    return redirect(url_for("dm_thread", thread_id=thread_id))
+
 @app.route("/inbox")
 def inbox():
     user = logged_in_user()
@@ -353,12 +375,30 @@ def search_users():
     users_list = [{"id": u[0], "name": u[1], "email": u[2], "avatar": u[3]} for u in results]
     return {"results": users_list}
 
+@app.route("/inbox/<int:thread_id>/rename", methods=["POST"])
+def rename_dm(thread_id):
+    user = logged_in_user()  # Make sure this returns the logged-in user dict
+    if not user or not db.user_in_thread(user["id"], thread_id):
+        flash("Not authorized.", "danger")
+        return redirect(url_for("inbox"))
+
+    new_name = request.form.get("new_name", "").strip()
+    if not new_name:
+        flash("Please enter a valid name", "warning")
+        return redirect(url_for("dm_thread", thread_id=thread_id))
+
+    db.rename_thread(thread_id, new_name)
+    flash("Conversation renamed!", "success")
+    return redirect(url_for("dm_thread", thread_id=thread_id))
+
+
 @app.route("/inbox/<int:thread_id>", methods=["GET", "POST"])
 def dm_thread(thread_id):
     user = logged_in_user()
     if not user or not db.user_in_thread(user["id"], thread_id):
         flash("Not authorized.", "danger")
         return redirect(url_for("inbox"))
+
     if request.method == "POST":
         content = request.form.get("content", "").strip()
         image = request.files.get("image")
@@ -373,9 +413,27 @@ def dm_thread(thread_id):
         db.add_dm_message(thread_id, user["id"], content, image_url)
         flash("Sent!", "success")
         return redirect(url_for("dm_thread", thread_id=thread_id))
+
+    # Fetch messages and participants
     messages = db.list_dm_messages(thread_id)
     participants = db.get_thread_participants(thread_id)
-    return render_template("dm_thread.html", user=user, messages=messages, participants=participants, thread_id=thread_id)
+
+    # Determine thread name
+    if len(participants) == 2:
+        # one-on-one chat: show the other person's name
+        other = [p for p in participants if p[0] != user["id"]][0]
+        thread_name = other[1]  # [1] is name
+    else:
+        # group chat: find the thread name from the first participant's DB info
+        thread_name = db.get_thread_name(thread_id) or "Group Chat"
+
+    return render_template("dm_thread.html",
+                           user=user,
+                           messages=messages,
+                           participants=participants,
+                           thread_id=thread_id,
+                           thread_name=thread_name)
+
 
 # --- RUN ---
 if __name__ == "__main__":

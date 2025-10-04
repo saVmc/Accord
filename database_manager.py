@@ -455,3 +455,44 @@ def unenroll_student(classID, studentID):
     cur.execute("DELETE FROM enrollments WHERE classID = ? AND studentID = ?", (classID, studentID))
     con.commit()
     con.close()
+
+def get_dm_thread_between_users(user1_id, user2_id):
+    """
+    Checks if a one-on-one DM thread exists between user1 and user2.
+    Returns the thread ID if it exists, otherwise None.
+    """
+    con = get_connection()
+    cur = con.cursor()
+    cur.execute("""
+        SELECT t.threadID
+        FROM dm_threads t
+        JOIN dm_participants p1 ON t.threadID = p1.threadID
+        JOIN dm_participants p2 ON t.threadID = p2.threadID
+        WHERE t.isGroup = 0 AND p1.userID = ? AND p2.userID = ?
+    """, (user1_id, user2_id))
+    row = cur.fetchone()
+    con.close()
+    if row:
+        return row[0] # threadID
+    return None
+
+def get_thread_name(threadID):
+    """
+    Returns the threadName for a DM or group chat.
+    """
+    con = get_connection()
+    cur = con.cursor()
+    cur.execute("SELECT threadName FROM dm_threads WHERE threadID = ?", (threadID,))
+    row = cur.fetchone()
+    con.close()
+    return row[0] if row else None
+
+def rename_thread(threadID, new_name):
+    """
+    Updates the threadName for a given thread.
+    """
+    con = get_connection()
+    cur = con.cursor()
+    cur.execute("UPDATE dm_threads SET threadName = ? WHERE threadID = ?", (new_name, threadID))
+    con.commit()
+    con.close()

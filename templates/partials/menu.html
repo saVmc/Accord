@@ -1,13 +1,13 @@
 <nav>
   <div class="nav-left" style="display: flex; align-items: center;">
-    <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" />
+    <img src="{{ url_for('static', filename='images/favicon.png') }}" alt="Logo" />
     <h1>Accord</h1>
   </div>
   <ul class="topnav">
     <li><a href="{{ url_for('index') }}">Home</a></li>
     {% if session.get('user') %}
       <li><a href="{{ url_for('classes') }}">Classes</a></li>
-      <li><a href="{{ url_for('inbox') }}">Inbox</a></li>
+      <li><a href="{{ url_for('inbox') }}">Messages</a></li>
       <li><a href="{{ url_for('settings') }}">Settings</a></li>
       <li><a href="{{ url_for('logout') }}">Logout</a></li>
       <li>

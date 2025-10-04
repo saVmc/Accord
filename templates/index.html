@@ -1,20 +1,37 @@
 {% extends "layout.html" %}
 {% block content %}
-<div class="hero">
-  <h1>Welcome to Accord</h1>
-  <p class="muted">A professional, unified classroom platform for modern learning.</p>
-  <p class="saVmc">by <strong>saVmc</strong></p>
-  {% if user %}
-    <div class="center">
-      <p>Signed in as <strong>{{ user.name }}</strong> ({{ user.role }})</p>
-      <a class="btn" href="{{ url_for('classes') }}">My Classes</a>
-      <a class="btn ghost" href="{{ url_for('inbox') }}">Inbox</a>
-    </div>
-  {% else %}
-    <div class="center">
-      <a class="btn" href="{{ url_for('signup') }}">Get Started</a>
-      <a class="btn ghost" href="{{ url_for('login') }}">Log In</a>
-    </div>
-  {% endif %}
+<div id="liquid-ether-container" class="liquid-ether-container">
+  <div class="hero">
+    <h1>Welcome to Accord</h1>
+    <p class="muted">A professional, simplified classroom and social networking platform for modern learning. Made by students, for students!</p>
+    <p class="saVmc">by <strong>saVmc</strong></p>
+    {% if user %}
+      <div class="center">
+        <p>Signed in as <strong>{{ user.name }}</strong> ({{ user.role }})</p>
+        <a class="btn" href="{{ url_for('classes') }}">My Classes</a>
+        <a class="btn ghost" href="{{ url_for('inbox') }}">Inbox</a>
+      </div>
+    {% else %}
+      <div class="center">
+        <a class="btn" href="{{ url_for('signup') }}">Get Started</a>
+        <a class="btn ghost" href="{{ url_for('login') }}">Log In</a>
+      </div>
+    {% endif %}
+  </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
+  <script src="{{ url_for('static', filename='js/liquid-ether.js') }}"></script>
+  <script>
+    new LiquidEther('#liquid-ether-container', {
+      colors: ['#14E6DD', '#3FD6FF', '#9FF7E5'],
+      background: '#0f2034',
+      speed: 0.8,
+      spread: 0.7,
+      size: 120
+    });
+  </script>
 {% endblock %}

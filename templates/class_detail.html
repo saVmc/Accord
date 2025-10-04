@@ -28,6 +28,7 @@
         </form>
       {% endif %}
     </div>
+
     <div class="card">
       <h3>Students ({{ students|length }})</h3>
       {% if students %}
@@ -36,6 +37,9 @@
             <li>
               <img class="avatar small" src="{{ s[3] or url_for('static', filename='images/default_avatar.png') }}" alt="Profile" style="vertical-align:middle;" />
               {{ s[1] }} — {{ s[2] }}
+              {% if user.id != s[0] %}
+                <a class="btn small ghost" href="{{ url_for('start_dm', user_id=s[0]) }}">Message</a>
+              {% endif %}
             </li>
           {% endfor %}
         </ul>
@@ -44,6 +48,7 @@
       {% endif %}
     </div>
   </div>
+
   <div class="card">
     <h3>Assignments</h3>
     {% if user.role == "teacher" and user.id == class_row[3] %}
@@ -62,6 +67,7 @@
       <p class="muted">No assignments yet.</p>
     {% endif %}
   </div>
+
   <div class="card">
     <h3>Class Messages</h3>
     {% if enrolled %}
@@ -97,6 +103,7 @@
       {% endif %}
     </div>
   </div>
+
   {% if user.role == "teacher" and user.id == teacher[0] %}
     <form method="post" action="{{ url_for('delete_class_route', class_id=class_row[0]) }}" onsubmit="return confirm('Delete this class?')" style="margin-top:1rem;">
       <button class="btn danger">Delete Class</button>
