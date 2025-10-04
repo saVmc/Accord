@@ -145,14 +145,14 @@ Might be fast enough for like a couple users? the system stops early on invalid 
 ### Test Cases :D
 based off of my test feature
 
-### Test Cases
+### Test Cases (updated 22/09/2025 with results)
 
 | Test Case ID | Test Case Name              | Preconditions | Test Steps | Expected Result | Actual Result | Pass/Fail | Priority |
 |--------------|-----------------------------|---------------|------------|-----------------|---------------|-----------|----------|
-| TC-1 | Correct Login (Student) | Student account exists in DB; correct email/password are known | 1. Open login page<br>2. Enter valid student email and correct password<br>3. Click "Login" | Student is logged in and redirected to Student Home | _N/A_ | _N/A_ | High |
-| TC-2 | Wrong Password (Teacher) | Teacher account exists in DB; correct email known, incorrect password will be entered | 1. Open login page<br>2. Enter valid teacher email and incorrect password<br>3. Click "Login" | Error: “Incorrect password” is displayed; login fails | _N/A_ | _N/A_ | High |
-| TC-3 | Invalid Email Format | None (rejected before even looked in the DB) | 1. Open login page<br>2. Enter `teacher@@school.com` and any password<br>3. Click "Login" | Error: “Invalid email format” is displayed | _N/A_ | _N/A_ | Medium |
-| TC-4 | Email Not Found | Email isnt in DB | 1. Open login page<br>2. Enter `newuser@school.com` and any password<br>3. Click "Login" | Error: “Account not found” is displayed | _N/A_ | _N/A_ | Medium |
+| TC-1 | Correct Login (Student) | Student account exists in DB; correct email/password are known | 1. Open login page<br>2. Enter valid student email and correct password<br>3. Click "Login" | Student is logged in and redirected to Student Home | If credentials present in DB, saved as active user and directs to Student Login page | Pass | High |
+| TC-2 | Wrong Password (Teacher) | Teacher account exists in DB; correct email known, incorrect password will be entered | 1. Open login page<br>2. Enter valid teacher email and incorrect password<br>3. Click "Login" | Error: “Incorrect password” is displayed; login fails | Error banner pops up, stating credentials aren't present in database. Doesn't allow login. | Pass | High |
+| TC-3 | Invalid Email Format | None (rejected before even looked in the DB) | 1. Open login page<br>2. Enter `teacher@@school.com` and any password<br>3. Click "Login" | Error: “Invalid email format” is displayed | Doesn't allow input, only valid email formats are allowed to be submitted in the box, with warning appearing if incorrect. | Pass | Medium |
+| TC-4 | Email Not Found | Email isnt in DB | 1. Open login page<br>2. Enter `newuser@school.com` and any password<br>3. Click "Login" | Error: “Account not found” is displayed | Error banner pops up, stating credentials aren't present in database. Doesn't allow login. | Pass | Medium |
 
 
 ---

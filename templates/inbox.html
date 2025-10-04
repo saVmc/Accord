@@ -1,0 +1,31 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="page">
+  <div class="page-header">
+    <h1>Inbox</h1>
+    <a class="btn" href="{{ url_for('new_dm') }}">+ New Message / Group</a>
+  </div>
+  <div class="card">
+    <h3>DM Threads</h3>
+    {% if threads %}
+      <ul>
+        {% for t in threads %}
+          <li style="margin-bottom:1.2em;">
+            <a class="btn ghost" href="{{ url_for('dm_thread', thread_id=t[0]) }}">
+              {% if t[1] %}
+                <span class="muted">[Group]</span>
+                {{ t[2] or "Unnamed group" }}
+              {% else %}
+                Conversation #{{ t[0] }}
+              {% endif %}
+              <span class="muted" style="font-size:0.9em;">— Created {{ t[3] }}</span>
+            </a>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="muted">No DMs or group chats yet.</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

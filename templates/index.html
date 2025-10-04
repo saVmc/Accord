@@ -2,12 +2,13 @@
 {% block content %}
 <div class="hero">
   <h1>Welcome to Accord</h1>
-  <p class="muted">A simple classroom platform. All intergrated. All in one.</p>
+  <p class="muted">A professional, unified classroom platform for modern learning.</p>
   <p class="saVmc">by <strong>saVmc</strong></p>
   {% if user %}
     <div class="center">
       <p>Signed in as <strong>{{ user.name }}</strong> ({{ user.role }})</p>
       <a class="btn" href="{{ url_for('classes') }}">My Classes</a>
+      <a class="btn ghost" href="{{ url_for('inbox') }}">Inbox</a>
     </div>
   {% else %}
     <div class="center">

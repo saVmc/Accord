@@ -3,7 +3,7 @@
 <div class="center-screen">
   <div class="card">
     <h2>Create Account</h2>
-    <form method="POST" action="/signup">
+    <form method="POST" action="/signup" enctype="multipart/form-data">
       <label>Full name</label>
       <input name="name" type="text" required />
       <label>Email</label>
@@ -15,6 +15,10 @@
         <option value="student">Student</option>
         <option value="teacher">Teacher</option>
       </select>
+      <div class="avatar-upload">
+        <label>Profile Picture (optional)</label>
+        <input type="file" name="avatar" accept="image/*" />
+      </div>
       <button class="btn" type="submit">Sign Up</button>
     </form>
     <p class="muted">Already have an account? <a href="{{ url_for('login') }}">Log in</a></p>

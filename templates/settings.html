@@ -2,22 +2,24 @@
 {% block content %}
 <div class="form-container">
   <h2>Profile Settings</h2>
-
-  <div class="card" style="margin-bottom:1rem;">
-    <p><strong>Current Name:</strong> {{ user.name }}</p>
-    <p><strong>Current Email:</strong> {{ user.email }}</p>
+  <div class="card" style="margin-bottom:1rem;display:flex;align-items:center;gap:1.5rem;">
+    <img class="avatar large" src="{{ user[5] or url_for('static', filename='images/default_avatar.png') }}" alt="Profile Picture" />
+    <div>
+      <p><strong>Current Name:</strong> {{ user[1] }}</p>
+      <p><strong>Current Email:</strong> {{ user[2] }}</p>
+    </div>
   </div>
-
-  <form method="post">
+  <form method="post" enctype="multipart/form-data">
     <label for="name">Change Name</label>
-    <input id="name" type="text" name="name" value="{{ user.name }}" />
-
+    <input id="name" type="text" name="name" value="{{ user[1] }}" />
     <label for="email">Change Email</label>
-    <input id="email" type="email" name="email" value="{{ user.email }}" />
-
+    <input id="email" type="email" name="email" value="{{ user[2] }}" />
     <label for="password">Change Password</label>
     <input id="password" type="password" name="password" placeholder="New password" />
-
+    <div class="avatar-upload">
+      <label>Change Profile Picture</label>
+      <input type="file" name="avatar" accept="image/*" />
+    </div>
     <button class="btn">Save Changes</button>
   </form>
 </div>

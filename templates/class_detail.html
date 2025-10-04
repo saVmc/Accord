@@ -13,15 +13,13 @@
       {% endif %}
     </div>
   </div>
-
   <div class="grid">
     <div class="card">
       <h3>Class Description</h3>
       <p class="muted">{{ class_row[4] or "No description yet." }}</p>
-
       {% if user.role == 'teacher' and user.id == class_row[3] %}
         <hr style="margin:12px 0">
-        <form method="POST" action="{{ url_for('class_edit', class_id=class_row[0]) }}">
+        <form method="POST" action="{{ url_for('edit_class', class_id=class_row[0]) }}">
           <label>Change class name</label>
           <input name="class_name" type="text" value="{{ class_row[1] }}" />
           <label>Update description</label>
@@ -30,13 +28,15 @@
         </form>
       {% endif %}
     </div>
-
     <div class="card">
       <h3>Students ({{ students|length }})</h3>
       {% if students %}
         <ul>
           {% for s in students %}
-            <li>{{ s[1] }} — {{ s[2] }}</li>
+            <li>
+              <img class="avatar small" src="{{ s[3] or url_for('static', filename='images/default_avatar.png') }}" alt="Profile" style="vertical-align:middle;" />
+              {{ s[1] }} — {{ s[2] }}
+            </li>
           {% endfor %}
         </ul>
       {% else %}
@@ -44,24 +44,51 @@
       {% endif %}
     </div>
   </div>
-
-  <div style="margin-top:1.25rem;" class="card">
+  <div class="card">
+    <h3>Assignments</h3>
+    {% if user.role == "teacher" and user.id == class_row[3] %}
+      <a class="btn ghost" href="{{ url_for('create_assignment', class_id=class_row[0]) }}">+ New Assignment</a>
+    {% endif %}
+    {% if assignments %}
+      <ul>
+        {% for a in assignments %}
+          <li>
+            <a href="{{ url_for('assignment_detail', assignment_id=a[0]) }}">{{ a[2] }}</a>
+            <span class="muted"> (Due: {{ a[4] }})</span>
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="muted">No assignments yet.</p>
+    {% endif %}
+  </div>
+  <div class="card">
     <h3>Class Messages</h3>
-
     {% if enrolled %}
-      <form method="POST" action="{{ url_for('class_message', class_id=class_row[0]) }}">
+      <form method="POST" action="{{ url_for('class_message', class_id=class_row[0]) }}" enctype="multipart/form-data" style="margin-bottom:1.5rem;">
         <textarea name="content" rows="3" placeholder="Write a message..." style="width:100%; padding:0.6rem; margin-bottom:0.5rem;"></textarea>
+        <input type="file" name="image" accept="image/*" />
         <button class="btn" type="submit">Post message</button>
       </form>
     {% else %}
       <p class="muted">Only the class teacher or enrolled students can post messages.</p>
     {% endif %}
-
     <div style="margin-top:1rem;">
       {% if messages %}
         {% for m in messages %}
-          <div style="border-top:1px solid rgba(255,255,255,0.04); padding:0.6rem 0;">
-            <div style="font-weight:700;">{{ m[5] }} <span class="muted" style="font-weight:400; font-size:0.9rem;"> — {{ m[4] }}</span></div>
+          <div class="message-bubble{% if m[2] == user.id %} own{% endif %}">
+            <div style="display:flex;align-items:center;gap:0.7rem;">
+              <img class="avatar small" src="{{ m[6] or url_for('static', filename='images/default_avatar.png') }}" alt="User" />
+              <div>
+                <span style="font-weight:700;">{{ m[5] }}</span>
+                <span class="muted" style="font-size:0.97em;">— {{ m[4] }}</span>
+              </div>
+            </div>
+            {% if m[7] %}
+              <div style="margin:0.8em 0;">
+                <img src="{{ m[7] }}" style="max-width:170px;max-height:110px;border-radius:12px;box-shadow:0 2px 12px #0f203433;" alt="Image" />
+              </div>
+            {% endif %}
             <div style="margin-top:6px;">{{ m[3] }}</div>
           </div>
         {% endfor %}
@@ -70,17 +97,15 @@
       {% endif %}
     </div>
   </div>
-</div>
-
-  {% if user.role == "teacher" and user.userID == teacher[0] %}
-    <form method="post" action="{{ url_for('delete_class_route', class_id=class_id) }}" onsubmit="return confirm('Delete this class?')" style="margin-top:1rem;">
+  {% if user.role == "teacher" and user.id == teacher[0] %}
+    <form method="post" action="{{ url_for('delete_class_route', class_id=class_row[0]) }}" onsubmit="return confirm('Delete this class?')" style="margin-top:1rem;">
       <button class="btn danger">Delete Class</button>
     </form>
-    <a href="{{ url_for('edit_class', class_id=class_id) }}" class="btn" style="margin-top:0.5rem;">Edit Class</a>
+    <a href="{{ url_for('edit_class', class_id=class_row[0]) }}" class="btn" style="margin-top:0.5rem;">Edit Class</a>
   {% elif user.role == "student" %}
-    <form method="post" action="{{ url_for('unenroll_class', class_id=class_id) }}" onsubmit="return confirm('Leave this class?')" style="margin-top:1rem;">
+    <form method="post" action="{{ url_for('unenroll_class', class_id=class_row[0]) }}" onsubmit="return confirm('Leave this class?')" style="margin-top:1rem;">
       <button class="btn danger">Unenroll</button>
     </form>
   {% endif %}
-
+</div>
 {% endblock %}

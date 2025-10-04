@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="page">
+  <div class="page-header">
+    <h1>Conversation</h1>
+    <a class="btn ghost" href="{{ url_for('inbox') }}">Back to Inbox</a>
+  </div>
+  <div class="card">
+    <h3>Participants</h3>
+    <ul>
+      {% for p in participants %}
+        <li>
+          <img class="avatar small" src="{{ p[3] or url_for('static', filename='images/default_avatar.png') }}" alt="Avatar" />
+          {{ p[1] }} &lt;{{ p[2] }}&gt;
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+  <div class="card">
+    <h3>Messages</h3>
+    <div style="max-height:380px;overflow-y:auto;">
+      {% for m in messages %}
+        <div class="message-bubble{% if m[2] == user.id %} own{% endif %}">
+          <div style="display:flex;align-items:center;gap:0.7rem;">
+            <img class="avatar small" src="{{ m[7] or url_for('static', filename='images/default_avatar.png') }}" alt="User" />
+            <div>
+              <span style="font-weight:700;">{{ m[6] }}</span>
+              <span class="muted" style="font-size:0.97em;">— {{ m[5] }}</span>
+            </div>
+          </div>
+          {% if m[4] %}
+            <div style="margin:0.8em 0;">
+              <img src="{{ m[4] }}" style="max-width:170px;max-height:110px;border-radius:12px;box-shadow:0 2px 12px #0f203433;" alt="Image" />
+            </div>
+          {% endif %}
+          <div style="margin-top:6px;">{{ m[3] }}</div>
+        </div>
+      {% endfor %}
+    </div>
+    <form method="POST" enctype="multipart/form-data" style="margin-top:1.3em;">
+      <textarea name="content" rows="2" placeholder="Type a message..." style="width:100%;padding:0.6rem;margin-bottom:0.5rem;"></textarea>
+      <input type="file" name="image" accept="image/*" />
+      <button class="btn" type="submit">Send</button>
+    </form>
+  </div>
+</div>
+{% endblock %}

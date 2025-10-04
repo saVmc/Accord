@@ -9,15 +9,16 @@
       <a class="btn" href="{{ url_for('join_class') }}">+ Join Class</a>
     {% endif %}
   </div>
-
   <div class="grid">
     {% if classes %}
       {% for c in classes %}
-        <div class="class-card">
-          <h3>{{ c[1] }}</h3>
-          <p class="muted">Code: {{ c[2] }}</p>
-          <a class="btn ghost" href="{{ url_for('class_detail', class_id=c[0]) }}">Open</a>
-        </div>
+        <div class="class-card" style="display:flex;align-items:center;justify-content:space-between;">
+  <div>
+    <h3>{{ c[1] }}</h3>
+    <p class="muted">Code: {{ c[2] }}</p>
+  </div>
+  <a class="btn ghost" href="{{ url_for('class_detail', class_id=c[0]) }}">Open</a>
+</div>
       {% endfor %}
     {% else %}
       <p class="muted">No classes yet.</p>

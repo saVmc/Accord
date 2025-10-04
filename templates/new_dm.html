@@ -1,0 +1,65 @@
+{% extends "layout.html" %}
+{% block content %}
+<div class="center-screen">
+  <div class="card">
+    <h2>Start New Conversation</h2>
+    <form method="POST">
+      <label>
+        <input type="checkbox" name="isGroup" id="isGroup" onchange="document.getElementById('groupNameRow').style.display = this.checked ? 'block' : 'none'"> Group Chat?
+      </label>
+      <div id="groupNameRow" style="display:none;">
+        <label>Group Name</label>
+        <input type="text" name="threadName" />
+      </div>
+      <label>Search Users</label>
+      <input type="text" id="search" placeholder="Name or email" autocomplete="off" style="margin-bottom:0.5em;" oninput="searchUsers(this.value)">
+      <div id="searchResults" style="margin-bottom:1.2em;"></div>
+      <input type="hidden" name="participants" id="participants" />
+      <div id="chosenUsers"></div>
+      <button class="btn" type="submit">Create Conversation</button>
+      <script>
+        let chosen = {};
+        function searchUsers(q) {
+          if (!q) {
+            document.getElementById('searchResults').innerHTML = '';
+            return;
+          }
+          fetch('/search_users?q=' + encodeURIComponent(q))
+            .then(r => r.json())
+            .then(data => {
+              let html = '';
+              data.results.forEach(u => {
+                if (chosen[u.id]) return;
+                html += `<div style="margin-bottom:3px;">
+                  <button type="button" onclick="addUser(${u.id}, '${u.name}', '${u.email}', '${u.avatar||""}')">
+                    <img src="${u.avatar||'/static/images/default_avatar.png'}" class="avatar small" style="margin-right:5px;">
+                    ${u.name} &lt;${u.email}&gt;
+                  </button>
+                </div>`;
+              });
+              document.getElementById('searchResults').innerHTML = html || '<span class="muted">No users found.</span>';
+            });
+        }
+        function addUser(id, name, email, avatar) {
+          chosen[id] = true;
+          let div = document.createElement('div');
+          div.innerHTML = `<img src="${avatar||'/static/images/default_avatar.png'}" class="avatar small" style="margin-right:7px;">${name} &lt;${email}&gt; <button type="button" onclick="removeUser(${id}, this)">Remove</button>`;
+          document.getElementById('chosenUsers').appendChild(div);
+          updateHidden();
+          document.getElementById('search').value = '';
+          document.getElementById('searchResults').innerHTML = '';
+        }
+        function removeUser(id, btn) {
+          delete chosen[id];
+          btn.parentNode.remove();
+          updateHidden();
+        }
+        function updateHidden() {
+          let arr = Object.keys(chosen);
+          document.getElementById('participants').value = arr.join(',');
+        }
+      </script>
+    </form>
+  </div>
+</div>
+{% endblock %}
