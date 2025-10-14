@@ -226,6 +226,8 @@ Lighthouse report before CSS + holidays (dashboard)
 | Performance | Accessibility | SEO | Best Practice |
 |-------------|---------------|-----|---------------|
 |      98       |       100        |  100   |     100          |
+---
+
 Lighthouse report after CSS + after holidays
 | Performance | Accessibility | SEO | Best Practice |
 |-------------|---------------|-----|---------------|
