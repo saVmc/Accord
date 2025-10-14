@@ -7,11 +7,39 @@
     <li><a href="{{ url_for('index') }}">Home</a></li>
     {% if session.get('user') %}
       <li><a href="{{ url_for('classes') }}">Classes</a></li>
-      <li><a href="{{ url_for('inbox') }}">Messages</a></li>
-      <li><a href="{{ url_for('settings') }}">Settings</a></li>
-      <li><a href="{{ url_for('logout') }}">Logout</a></li>
-      <li>
-        <img class="avatar small" src="{{ session['user']['avatar'] or url_for('static', filename='images/default_avatar.png') }}" alt="Profile" style="vertical-align: middle;" />
+      <li class="profile-dropdown">
+        <button class="profile-button" onclick="toggleProfileDropdown(event)">
+          <img class="avatar small" src="{{ session['user']['avatar'] or url_for('static', filename='images/default_avatar.png') }}" alt="Profile" />
+          {% if unread_count > 0 %}
+            <span class="profile-notification-badge">{{ unread_count }}</span>
+          {% endif %}
+        </button>
+        <div class="dropdown-menu" id="profileDropdown">
+          <div class="dropdown-header">
+            <img class="avatar" src="{{ session['user']['avatar'] or url_for('static', filename='images/default_avatar.png') }}" alt="Profile" />
+            <div>
+              <strong>{{ session['user']['name'] }}</strong>
+              <span class="muted">{{ session['user']['role']|capitalize }}</span>
+            </div>
+          </div>
+          <div class="dropdown-divider"></div>
+          <a href="{{ url_for('inbox') }}" class="dropdown-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            Messages
+            {% if unread_count > 0 %}
+              <span class="dropdown-badge">{{ unread_count }}</span>
+            {% endif %}
+          </a>
+          <a href="{{ url_for('settings') }}" class="dropdown-item">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6m5.2-14.2l-4.2 4.2m0 6l4.2 4.2M23 12h-6m-6 0H1m14.2 5.2l-4.2-4.2m0-6l-4.2-4.2"></path></svg>
+            Settings
+          </a>
+          <div class="dropdown-divider"></div>
+          <a href="{{ url_for('logout') }}" class="dropdown-item logout">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+            Logout
+          </a>
+        </div>
       </li>
     {% else %}
       <li><a href="{{ url_for('login') }}">Login</a></li>
@@ -19,3 +47,18 @@
     {% endif %}
   </ul>
 </nav>
+
+<script>
+function toggleProfileDropdown(event) {
+  event.stopPropagation();
+  const dropdown = document.getElementById('profileDropdown');
+  dropdown.classList.toggle('show');
+}
+
+document.addEventListener('click', function(event) {
+  const dropdown = document.getElementById('profileDropdown');
+  if (dropdown && dropdown.classList.contains('show')) {
+    dropdown.classList.remove('show');
+  }
+});
+</script>

@@ -5,22 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Accord - All in one.</title>
 
-    <!-- Main CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
 
-    <!-- Favicon & Web App Icons -->
+    <!-- service worker stuff -->
     <link rel="icon" type="image/png" sizes="96x96" href="{{ url_for('static', filename='icons/favicon-96x96.png') }}" />
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='icons/favicon.svg') }}">
     <link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/apple-touch-icon.png') }}">
     <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
-
-    <!-- PWA Meta -->
     <meta name="theme-color" content="#14E6DD">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-    <!-- PWA/Service Worker -->
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
   </head>
   <body>
@@ -36,7 +31,12 @@
         {% endif %}
       {% endwith %}
       {% block content %}{% endblock %}
+      
     </main>
     {% block scripts %}{% endblock %}
   </body>
+  <footer class="app-footer">
+  <p>Made by <strong>Farley Hammond</strong> for 10CPTY Assessment Task 3</p>
+  <p class="footer-year">{{ now.year }} ©? <i>As many rights as possible reserved. </i>(｡•̀ᴗ-)✧</p>
+</footer>
 </html>

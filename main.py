@@ -3,6 +3,7 @@ import database_manager as db
 import os
 from werkzeug.utils import secure_filename
 from datetime import datetime
+import pytz
 
 # --- CONFIG ---
 app = Flask(__name__)
@@ -24,13 +25,53 @@ def logged_in_user():
 def user_avatar(user):
     return user.get('avatar') or url_for('static', filename='images/default_avatar.png')
 
-# --- ROUTES ---
+# unused as of 4/10
+@app.context_processor
+def inject_unread_count():
+    user = logged_in_user()
+    if user:
+        unread_count = db.get_unread_message_count(user["id"])
+        return dict(unread_count=unread_count)
+    return dict(unread_count=0)
+
+# Sydney time
+@app.template_filter('sydney_time')
+def sydney_time_filter(dt_string):
+    return db.format_sydney_time(dt_string)
+
+@app.template_global()
+def get_other_user(thread_id, current_user_id):
+    return db.get_thread_other_user_name(thread_id, current_user_id)
+
+# route spam below (very organised)
 
 @app.route("/")
 @app.route("/index.html")
 def index():
     user = logged_in_user()
+    if user:
+        return redirect(url_for("dashboard"))
     return render_template("index.html", user=user)
+
+@app.route("/dashboard")
+def dashboard():
+    user = logged_in_user()
+    if not user:
+        flash("Please log in", "warning")
+        return redirect(url_for("login"))
+    classes = db.list_classes_for_user(user["id"], user["role"])
+    if user["role"] == "student":
+        upcoming_assignments = db.get_upcoming_assignments_for_student(user["id"], 10)
+    else:
+        upcoming_assignments = db.get_recent_assignments_for_teacher(user["id"], 10)
+    recent_messages = db.get_threads_for_user(user["id"])
+    class_messages = db.get_recent_class_messages_for_user(user["id"], user["role"], 10)
+    return render_template("dashboard.html", 
+                          user=user, 
+                          classes=classes,
+                          upcoming_assignments=upcoming_assignments,
+                          recent_messages=recent_messages,
+                          class_messages=class_messages)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -70,7 +111,7 @@ def signup():
             flash("Email already registered", "warning")
             return redirect(url_for("login"))
         db.create_user(name, email, password, role, avatar_url)
-        flash("Account created! Please log in :)", "success")
+        flash("Account created! Please log in", "success")
         return redirect(url_for("login"))
     return render_template("signup.html")
 
@@ -88,7 +129,6 @@ def settings():
         return redirect(url_for("login"))
     current = db.get_user_by_id(user["id"])
     if request.method == "POST":
-        # Update profile fields
         name = request.form.get("name", "").strip()
         email = request.form.get("email", "").strip()
         password = request.form.get("password", "")
@@ -105,7 +145,7 @@ def settings():
                 "id": updated[0], "name": updated[1], "email": updated[2],
                 "role": updated[4], "avatar": updated[5]
             }
-            flash("Settings updated", "success")
+            flash("Settings updated! :D ", "success")
         except Exception as e:
             flash("Error updating settings: " + str(e), "danger")
         return redirect(url_for("settings"))
@@ -115,7 +155,7 @@ def settings():
 def uploaded_file(filename):
     return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
-# --- CLASSES ---
+# classes
 @app.route("/classes")
 def classes():
     user = logged_in_user()
@@ -189,7 +229,7 @@ def edit_class(class_id):
         return redirect(url_for("classes"))
     c = db.get_class_by_id(class_id)
     if not c or c[3] != user["id"]:
-        flash("You don’t own this class", "danger")
+        flash("You don't own this class", "danger")
         return redirect(url_for("classes"))
     if request.method == "POST":
         className = request.form.get("className") or None
@@ -219,7 +259,7 @@ def unenroll_class(class_id):
     flash("You left the class", "info")
     return redirect(url_for("classes"))
 
-# --- CLASS MESSAGES (with image upload) ---
+# Class messages plus some posting
 @app.route("/class/<int:class_id>/message", methods=["POST"])
 def class_message(class_id):
     user = logged_in_user()
@@ -248,7 +288,7 @@ def class_message(class_id):
     flash("Message posted", "success")
     return redirect(url_for("class_detail", class_id=class_id))
 
-# --- ASSIGNMENTS ---
+# teacher assignments (broken, gotta fix)
 @app.route("/class/<int:class_id>/assignments/new", methods=["GET", "POST"])
 def create_assignment(class_id):
     user = logged_in_user()
@@ -310,8 +350,6 @@ def grade_submission(submission_id):
     feedback = request.form.get("feedback", "").strip()
     db.grade_submission(submission_id, grade, feedback)
     flash("Graded!", "success")
-    # Redirect back to assignment page (find assignmentID)
-    # For security, just redirect to /classes if not found
     return redirect(request.referrer or url_for("classes"))
 
 # --- DMs AND GROUP CHATS ---
@@ -326,15 +364,8 @@ def start_dm(user_id):
         flash("Cannot message yourself", "warning")
         return redirect(url_for("inbox"))
 
-    # Check if a DM thread already exists between these two users
-    thread_id = db.get_dm_thread_between_users(user["id"], user_id)
-    if not thread_id:
-        # Get the other user's name
-        other_user = db.get_user_by_id(user_id)
-        thread_name = f"{user['name']} & {other_user[1]}"  # Assuming [1] is name
-        # Create new DM thread with a proper name
-        thread_id = db.create_dm_thread([user["id"], user_id], isGroup=False, threadName=thread_name, createdBy=user["id"])
-
+    # Get or create DM thread
+    thread_id = db.get_or_create_dm_with_user(user["id"], user_id)
     return redirect(url_for("dm_thread", thread_id=thread_id))
 
 @app.route("/inbox")
@@ -355,7 +386,7 @@ def new_dm():
     if request.method == "POST":
         is_group = bool(request.form.get("isGroup"))
         thread_name = request.form.get("threadName") if is_group else None
-        raw_participants = request.form.get("participants")  # will be "1,18" or just "1"
+        raw_participants = request.form.get("participants")
         if raw_participants:
             participant_ids = [int(uid) for uid in raw_participants.split(",") if uid.strip()]
         else:
@@ -377,7 +408,7 @@ def search_users():
 
 @app.route("/inbox/<int:thread_id>/rename", methods=["POST"])
 def rename_dm(thread_id):
-    user = logged_in_user()  # Make sure this returns the logged-in user dict
+    user = logged_in_user()
     if not user or not db.user_in_thread(user["id"], thread_id):
         flash("Not authorized.", "danger")
         return redirect(url_for("inbox"))
@@ -390,7 +421,6 @@ def rename_dm(thread_id):
     db.rename_thread(thread_id, new_name)
     flash("Conversation renamed!", "success")
     return redirect(url_for("dm_thread", thread_id=thread_id))
-
 
 @app.route("/inbox/<int:thread_id>", methods=["GET", "POST"])
 def dm_thread(thread_id):
@@ -411,21 +441,19 @@ def dm_thread(thread_id):
             flash("Enter a message or attach an image", "warning")
             return redirect(url_for("dm_thread", thread_id=thread_id))
         db.add_dm_message(thread_id, user["id"], content, image_url)
-        flash("Sent!", "success")
         return redirect(url_for("dm_thread", thread_id=thread_id))
 
-    # Fetch messages and participants
+    db.mark_thread_as_read(user["id"], thread_id)
+    
     messages = db.list_dm_messages(thread_id)
     participants = db.get_thread_participants(thread_id)
 
-    # Determine thread name
-    if len(participants) == 2:
-        # one-on-one chat: show the other person's name
-        other = [p for p in participants if p[0] != user["id"]][0]
-        thread_name = other[1]  # [1] is name
+    thread_info = db.get_thread_by_id(thread_id)
+    if thread_info and thread_info[1]:  
+        thread_name = thread_info[2] or "Group Chat"
     else:
-        # group chat: find the thread name from the first participant's DB info
-        thread_name = db.get_thread_name(thread_id) or "Group Chat"
+        other_user = db.get_thread_other_user_name(thread_id, user["id"])
+        thread_name = other_user[0] if other_user else "Direct Message"
 
     return render_template("dm_thread.html",
                            user=user,
@@ -434,7 +462,14 @@ def dm_thread(thread_id):
                            thread_id=thread_id,
                            thread_name=thread_name)
 
+@app.context_processor # for timezone in foorter
+def inject_unread_count():
+    user = logged_in_user()
+    now = datetime.now(pytz.timezone('Australia/Sydney'))
+    if user:
+        unread_count = db.get_unread_message_count(user["id"])
+        return dict(unread_count=unread_count, now=now)
+    return dict(unread_count=0, now=now)
 
-# --- RUN ---
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)

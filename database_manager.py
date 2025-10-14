@@ -2,8 +2,25 @@ import sqlite3 as sql
 import random
 import string
 from datetime import datetime
+import pytz
 
 DB_PATH = "database/data_source.db"
+SYDNEY_TZ = pytz.timezone('Australia/Sydney')
+
+def get_sydney_time():
+    return datetime.now(SYDNEY_TZ)
+
+def format_sydney_time(dt_string):
+    """Convert UTC datetime string to Sydney time"""
+    if not dt_string:
+        return ""
+    try:
+        utc_dt = datetime.strptime(dt_string, '%Y-%m-%d %H:%M:%S')
+        utc_dt = pytz.utc.localize(utc_dt)
+        sydney_dt = utc_dt.astimezone(SYDNEY_TZ)
+        return sydney_dt.strftime('%d %b %I:%M %p')
+    except:
+        return dt_string
 
 def get_connection():
     con = sql.connect(DB_PATH)
@@ -106,6 +123,7 @@ def init_db():
     CREATE TABLE IF NOT EXISTS dm_participants (
         threadID INTEGER,
         userID INTEGER,
+        lastRead DATETIME,
         PRIMARY KEY (threadID, userID),
         FOREIGN KEY (threadID) REFERENCES dm_threads(threadID),
         FOREIGN KEY (userID) REFERENCES users(userID)
@@ -193,7 +211,7 @@ def create_class(className, teacherID, description=None):
         except sql.IntegrityError:
             continue
     con.close()
-    raise Exception("Could not generate unique class code — try again.")
+    raise Exception("Could not generate unique class code - try again.")
 
 def get_class_by_code(code):
     con = get_connection()
@@ -378,19 +396,122 @@ def create_dm_thread(participant_ids, isGroup=False, threadName=None, createdBy=
     con.close()
     return threadID
 
+def get_or_create_dm_with_user(user1_id, user2_id):
+    """Get existing 1-on-1 DM thread or create new one"""
+    con = get_connection()
+    cur = con.cursor()
+    
+    # Find existing 1-on-1 thread between these two users
+    cur.execute("""
+        SELECT t.threadID 
+        FROM dm_threads t
+        WHERE t.isGroup = 0 
+        AND t.threadID IN (
+            SELECT threadID FROM dm_participants WHERE userID = ?
+        )
+        AND t.threadID IN (
+            SELECT threadID FROM dm_participants WHERE userID = ?
+        )
+        AND (
+            SELECT COUNT(*) FROM dm_participants WHERE threadID = t.threadID
+        ) = 2
+    """, (user1_id, user2_id))
+    
+    existing = cur.fetchone()
+    con.close()
+    
+    if existing:
+        return existing[0]
+    else:
+        # Get user names for thread name
+        user1 = get_user_by_id(user1_id)
+        user2 = get_user_by_id(user2_id)
+        thread_name = f"{user1[1]} & {user2[1]}"
+        return create_dm_thread([user1_id, user2_id], isGroup=False, threadName=thread_name, createdBy=user1_id)
+
 def get_threads_for_user(userID):
     con = get_connection()
     cur = con.cursor()
     cur.execute("""
-        SELECT t.threadID, t.isGroup, t.threadName, t.createdAt
+        SELECT 
+            t.threadID, 
+            t.isGroup, 
+            t.threadName, 
+            t.createdAt,
+            (SELECT COUNT(*) 
+             FROM dm_messages m 
+             WHERE m.threadID = t.threadID 
+             AND m.timestamp > COALESCE(p.lastRead, '1970-01-01')
+             AND m.senderID != ?) as unread_count,
+            (SELECT m2.timestamp 
+             FROM dm_messages m2 
+             WHERE m2.threadID = t.threadID 
+             ORDER BY m2.timestamp DESC LIMIT 1) as last_message_time,
+            (SELECT m3.content 
+             FROM dm_messages m3 
+             WHERE m3.threadID = t.threadID 
+             ORDER BY m3.timestamp DESC LIMIT 1) as last_message_preview
         FROM dm_threads t
         JOIN dm_participants p ON t.threadID = p.threadID
         WHERE p.userID = ?
-        ORDER BY t.createdAt DESC
-    """, (userID,))
+        ORDER BY last_message_time DESC, t.createdAt DESC
+    """, (userID, userID))
     rows = cur.fetchall()
     con.close()
     return rows
+
+def get_thread_other_user_name(threadID, currentUserID):
+    """For 1-on-1 DMs, get the other user's name"""
+    con = get_connection()
+    cur = con.cursor()
+    cur.execute("""
+        SELECT u.name, u.avatar
+        FROM dm_participants p
+        JOIN users u ON p.userID = u.userID
+        WHERE p.threadID = ? AND p.userID != ?
+        LIMIT 1
+    """, (threadID, currentUserID))
+    result = cur.fetchone()
+    con.close()
+    return result if result else ("Unknown", None)
+
+def get_unread_message_count(userID):
+    """Get total unread message count for a user"""
+    con = get_connection()
+    cur = con.cursor()
+    cur.execute("""
+        SELECT COUNT(*)
+        FROM dm_messages m
+        JOIN dm_participants p ON m.threadID = p.threadID
+        WHERE p.userID = ?
+        AND m.senderID != ?
+        AND m.timestamp > COALESCE(p.lastRead, '1970-01-01')
+    """, (userID, userID))
+    count = cur.fetchone()[0]
+    con.close()
+    return count
+
+def mark_thread_as_read(userID, threadID):
+    """Mark all messages in a thread as read for a user"""
+    con = get_connection()
+    cur = con.cursor()
+    now = datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S')
+    cur.execute("""
+        UPDATE dm_participants 
+        SET lastRead = ? 
+        WHERE userID = ? AND threadID = ?
+    """, (now, userID, threadID))
+    con.commit()
+    con.close()
+
+def get_thread_by_id(threadID):
+    """Get thread info"""
+    con = get_connection()
+    cur = con.cursor()
+    cur.execute("SELECT * FROM dm_threads WHERE threadID = ?", (threadID,))
+    result = cur.fetchone()
+    con.close()
+    return result
 
 def get_thread_participants(threadID):
     con = get_connection()
@@ -438,6 +559,14 @@ def user_in_thread(userID, threadID):
     con.close()
     return bool(result)
 
+def rename_thread(threadID, new_name):
+    """Updates the threadName for a given thread"""
+    con = get_connection()
+    cur = con.cursor()
+    cur.execute("UPDATE dm_threads SET threadName = ? WHERE threadID = ?", (new_name, threadID))
+    con.commit()
+    con.close()
+
 # --------- CLASS/USER DELETE ---------
 def delete_class(classID, teacherID):
     con = get_connection()
@@ -456,43 +585,105 @@ def unenroll_student(classID, studentID):
     con.commit()
     con.close()
 
-def get_dm_thread_between_users(user1_id, user2_id):
-    """
-    Checks if a one-on-one DM thread exists between user1 and user2.
-    Returns the thread ID if it exists, otherwise None.
-    """
+# --------- DASHBOARD QUERIES ---------
+def get_upcoming_assignments_for_student(studentID, limit=10):
+    """Get upcoming assignments for enrolled classes"""
     con = get_connection()
     cur = con.cursor()
     cur.execute("""
-        SELECT t.threadID
-        FROM dm_threads t
-        JOIN dm_participants p1 ON t.threadID = p1.threadID
-        JOIN dm_participants p2 ON t.threadID = p2.threadID
-        WHERE t.isGroup = 0 AND p1.userID = ? AND p2.userID = ?
-    """, (user1_id, user2_id))
-    row = cur.fetchone()
+        SELECT 
+            a.assignmentID, 
+            a.classID, 
+            a.title, 
+            a.description, 
+            a.dueDate,
+            s.submissionID,
+            c.className,
+            CASE WHEN date(a.dueDate) < date('now') THEN 1 ELSE 0 END as is_overdue,
+            CASE WHEN date(a.dueDate) <= date('now', '+3 days') THEN 1 ELSE 0 END as is_due_soon
+        FROM assignments a
+        JOIN classes c ON a.classID = c.classID
+        JOIN enrollments e ON c.classID = e.classID
+        LEFT JOIN submissions s ON a.assignmentID = s.assignmentID AND s.studentID = ?
+        WHERE e.studentID = ?
+        AND s.submissionID IS NULL
+        ORDER BY a.dueDate ASC
+        LIMIT ?
+    """, (studentID, studentID, limit))
+    rows = cur.fetchall()
     con.close()
-    if row:
-        return row[0] # threadID
-    return None
+    return rows
 
-def get_thread_name(threadID):
-    """
-    Returns the threadName for a DM or group chat.
-    """
+def get_recent_assignments_for_teacher(teacherID, limit=10):
+    """Get recent assignments created by teacher"""
     con = get_connection()
     cur = con.cursor()
-    cur.execute("SELECT threadName FROM dm_threads WHERE threadID = ?", (threadID,))
-    row = cur.fetchone()
+    cur.execute("""
+        SELECT 
+            a.assignmentID, 
+            a.classID, 
+            a.title, 
+            a.description, 
+            a.dueDate,
+            NULL,
+            c.className,
+            0,
+            0
+        FROM assignments a
+        JOIN classes c ON a.classID = c.classID
+        WHERE c.teacherID = ?
+        ORDER BY a.dueDate DESC
+        LIMIT ?
+    """, (teacherID, limit))
+    rows = cur.fetchall()
     con.close()
-    return row[0] if row else None
+    return rows
 
-def rename_thread(threadID, new_name):
-    """
-    Updates the threadName for a given thread.
-    """
+def get_recent_class_messages_for_user(userID, role, limit=10):
+    """Get recent class messages from user's classes"""
     con = get_connection()
     cur = con.cursor()
-    cur.execute("UPDATE dm_threads SET threadName = ? WHERE threadID = ?", (new_name, threadID))
-    con.commit()
+    
+    if role == 'teacher':
+        cur.execute("""
+            SELECT 
+                cm.messageID, 
+                cm.classID, 
+                cm.senderID, 
+                cm.content, 
+                cm.timestamp, 
+                u.name, 
+                u.avatar, 
+                cm.imageURL,
+                c.className
+            FROM class_messages cm
+            JOIN users u ON cm.senderID = u.userID
+            JOIN classes c ON cm.classID = c.classID
+            WHERE c.teacherID = ?
+            ORDER BY cm.timestamp DESC
+            LIMIT ?
+        """, (userID, limit))
+    else:
+        cur.execute("""
+            SELECT 
+                cm.messageID, 
+                cm.classID, 
+                cm.senderID, 
+                cm.content, 
+                cm.timestamp, 
+                u.name, 
+                u.avatar, 
+                cm.imageURL,
+                c.className
+            FROM class_messages cm
+            JOIN users u ON cm.senderID = u.userID
+            JOIN classes c ON cm.classID = c.classID
+            JOIN enrollments e ON c.classID = e.classID
+            WHERE e.studentID = ?
+            ORDER BY cm.timestamp DESC
+            LIMIT ?
+        """, (userID, limit))
+    
+    rows = cur.fetchall()
     con.close()
+    return rows

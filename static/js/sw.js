@@ -1,21 +1,19 @@
-const CACHE_NAME = 'pwa-cache-v2';  // Changed version to force update
+const CACHE_NAME = 'pwa-cache-v2';
 const urlsToCache = [
   '/',
   '/static/css/style.css',
   '/static/js/app.js',
-  '/static/manifest.json'  // Added this
+  '/static/manifest.json' 
 ];
 
-// Install event
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => cache.addAll(urlsToCache))
-      .then(() => self.skipWaiting())  // Added this to activate immediately
+      .then(() => self.skipWaiting())  
   );
 });
 
-// Fetch event
 self.addEventListener('fetch', event => {
   event.respondWith(
     caches.match(event.request)
@@ -23,7 +21,6 @@ self.addEventListener('fetch', event => {
   );
 });
 
-// Activate event
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(cacheNames => {
@@ -34,6 +31,6 @@ self.addEventListener('activate', event => {
           }
         })
       );
-    }).then(() => self.clients.claim())  // Added this to take control immediately
+    }).then(() => self.clients.claim())
   );
 });

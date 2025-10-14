@@ -1,5 +1,7 @@
 # Accord – A Social Networking App for Students
 
+- [disclaimer](PLSREADME.md): citing used online resources 
+
 ## Table of Contents!
 
 - [Part 1 – Project Definition and Requirements](#part-1--project-definition-and-requirements)
@@ -43,9 +45,9 @@ Accord helps students communicate, collaborate, and stay organized—all within 
 
 ### Non-Functional Requirements
 - **Interface** – Clean, minimal layout; consistent colour scheme (navy blue, grey, white accents); responsive on mobile, tablet, desktop.  
-- **Performance** – Fast loading, smooth screen changes, low-latency messaging.  
+- **Performance** – Fast loading, smooth screen changes, fast messaging.  
 - **Security** – Encrypted login/data, sensible permissions.  
-- **Accessibility** – Adjustable text size, high-contrast mode.  
+- **Accessibility** – Adjustable text size, high-contrast mode, theme colour changes.  
 - **Reliability** – Stable performance, offline access to timetable and past assignments.  
 - **Scalability** – Handles multiple schools and hundreds of users.
 
@@ -66,6 +68,8 @@ Accord helps students communicate, collaborate, and stay organized—all within 
 ### Developer Notes
 
 Hi 👋
+My commits are incredibly inconsistent. I just forget....
+You have been warned........
 ---
 
 ## Part 2 – Design and Wireframes
@@ -74,8 +78,8 @@ Hi 👋
 
 **Key Annotations:**
 - **Navigation** – Bottom bar with Chat, Timetable, Assignments, for super-friendly mobile use  
-- **Timetable** – Timetable list → nice colours and organised
-- **Login Page** – Simple options → clean buttons
+- **Timetable** – Timetable list > nice colours and organised
+- **Login Page** – Simple options > clean buttons
 
 ---
 
@@ -124,14 +128,14 @@ Hi 👋
 1. User opens login screen  
 2. Enter email + password  
 3. Check email format  
-   - Invalid → error message → stop  
+   - Invalid > error message > stop  
 4. Search database for email  
-   - Not found → error message → stop  
+   - Not found > error message > stop  
 5. Compare entered password (encrypted) with stored encrypted password  
-   - No match → error message → stop  
-6. If match → start session and check role:  
-   - Teacher → Teacher Home/Dashboard  
-   - Student → Student Home
+   - No match > error message > stop  
+6. If match > start session and check role:  
+   - Teacher > Teacher Home/Dashboard  
+   - Student > Student Home
   
 
 
@@ -215,3 +219,109 @@ SELECT subject, dayOfWeek, startTime, endTime, teacherID
 FROM timetable
 ORDER BY dayOfWeek, startTime;
 ```
+
+
+## COMPLETE CSS OVERHAUL GAME PLAN! pre holidays
+Lighthouse report before CSS + holidays (dashboard)
+| Performance | Accessibility | SEO | Best Practice |
+|-------------|---------------|-----|---------------|
+|      98       |       100        |  100   |     100          |
+Lighthouse report after CSS + after holidays
+| Performance | Accessibility | SEO | Best Practice |
+|-------------|---------------|-----|---------------|
+|       97      |       98        |   91  |     100          |
+
+Advice from Lighthouse, post holidays
+- Requests are blocking the page's initial render, which may delay LCP. Deferring or inlining can move these network requests out of the critical path. (font)
+- Reducing the download time of images can improve the perceived load time of the page and LCP.
+- Avoid chaining critical requests by reducing the length of chains, reducing the download size of resources, or deferring the download of unnecessary resources to improve page load.  
+-Your first network request is the most important. Reduce its latency by avoiding redirects, ensuring a fast server response, and enabling text compression. (apply compression mostly)
+
+- Properly ordered headings that do not skip levels convey the semantic structure of the page, making it easier to navigate and understand when using assistive technologies.
+- Meta descriptions may be included in search results to concisely summarize page content.
+
+I think CSS is like very very very important in a website so I'm going to try to prioritise it :)
+Here are some notes on what I like in a good UI and what I've found online to try include 
+### Things I REALLY LIKE (and want to add)
+- Apple's liquid glass (glassmorphism?) from IOS26 + clean semi transparent layers
+  - 20px blur ish + transparency
+- Cool animations like pop ups, fades, slides stuff like that BUT SMOOOTHHH
+- Animated card underline (thanks internet :D)
+  ```
+  .class-card::after {
+  height: 3px;
+  background: linear-gradient(90deg, var(--primary) 0%, transparent 100%);
+  transform: scaleX(0);
+  transition: transform var(--transition-bounce);
+  }
+  ```
+
+- Nice rounded corners make everything look good always
+- Very reactive everything CSS, like cursor reaction such as pop ups
+  - Glows, outlines, transforms, all within a consistent colour scheme
+- NICE CENTERED ELEMENTS, CLEAR PADDING and nice margins
+- Minamilstic symbols, svgs from W3
+- Pretty colours, gradients? Colour pallete make GLOBAL!!
+- Gradients in the text, moving maybe if its not too distracting
+- Cool animated background
+  - Found out you can do this very easy! courtesy of codepen v
+
+```
+body::before {
+  background: radial-gradient(circle at 20% 50%, rgba(20, 230, 221, 0.03) 0%, transparent 50%);
+  animation: float 20s ease-in-out infinite; /* this specifically!!!! */
+}
+```
+
+- ANIMATION DELAY !! key to making it look good and clean apparently
+
+```
+.grid > * {
+  animation-delay: calc(var(--item-index, 0) * 0.1s);
+}
+```
+
+  - ALSO...  animation **curves** for super clean
+
+  ```
+  --transition-bounce: 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  ```
+
+  - And directional animations as well
+
+  ```
+  .class-card::after {
+  transform: scaleX(0);
+  transform-origin: left;
+  }
+  ```
+
+  
+- Nice semantic color usage (success, danger, warning)
+- Dark mode, but not too dark? Like clean consistent blue dark, like midnight dark
+
+- Custom scrollbar??!
+
+- Primary: Cyan (`#14E6DD`) - Modern, electric almost 
+- Dark: Navy (`#0a1929`) - Professional, much easier on eyes than any other colour
+
+
+- USE SYMBOLS IN PLACE OF TEXT for simplicity!
+  - W3 free assets/icons https://www.w3.org/2000/svg
+
+
+- LOAAADDD up ur transitions to make them compound
+  ```
+  transform: translateY(#x) scale(#) rotate(#deg); /* Like this 
+  ```
+
+
+
+## Weekly logs
+
+
+
+## Known Bugs (pre submission to fix by final)
+- Database lock errors when editing class 
+- Random CSS inconsitencies and visual bugs 
+- Button overlaps and incorrect hover animations

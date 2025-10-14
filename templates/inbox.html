@@ -2,29 +2,58 @@
 {% block content %}
 <div class="page">
   <div class="page-header">
-    <h1>Inbox</h1>
-    <a class="btn" href="{{ url_for('new_dm') }}">+ New Message / Group</a>
+    <h1>Messages</h1>
+    <a class="btn" href="{{ url_for('new_dm') }}">+ New Conversation</a>
   </div>
-  <div class="card">
-    <h3>DM Threads</h3>
+
+  <div class="inbox-container">
     {% if threads %}
-      <ul>
+      <div class="thread-list">
         {% for t in threads %}
-          <li style="margin-bottom:1.2em;">
-            <a class="btn ghost" href="{{ url_for('dm_thread', thread_id=t[0]) }}">
+          {% set other_user = get_other_user(t[0], user.id) if not t[1] else None %}
+          <a href="{{ url_for('dm_thread', thread_id=t[0]) }}" class="thread-item {% if t[4] > 0 %}unread{% endif %}">
+            <div class="thread-avatar-container">
               {% if t[1] %}
-                <span class="muted">[Group]</span>
-                {{ t[2] or "Unnamed group" }}
+                <div class="group-avatar">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                </div>
               {% else %}
-                Conversation #{{ t[0] }}
+                <img class="thread-avatar" src="{{ other_user[1] or url_for('static', filename='images/default_avatar.png') }}" alt="Avatar" />
               {% endif %}
-              <span class="muted" style="font-size:0.9em;">— Created {{ t[3] }}</span>
-            </a>
-          </li>
+              {% if t[4] > 0 %}
+                <span class="unread-badge">{{ t[4] }}</span>
+              {% endif %}
+            </div>
+            
+            <div class="thread-content">
+              <div class="thread-header">
+                <h3 class="thread-name">
+                  {% if t[1] %}
+                    {{ t[2] or "Unnamed Group" }}
+                  {% else %}
+                    {{ other_user[0] if other_user else "Unknown User" }}
+                  {% endif %}
+                </h3>
+                {% if t[5] %}
+                  <span class="thread-time">{{ t[5]|sydney_time }}</span>
+                {% endif %}
+              </div>
+              {% if t[6] %}
+                <p class="thread-preview">{{ t[6][:60] }}{% if t[6]|length > 60 %}...{% endif %}</p>
+              {% else %}
+                <p class="thread-preview muted">No messages yet</p>
+              {% endif %}
+            </div>
+          </a>
         {% endfor %}
-      </ul>
+      </div>
     {% else %}
-      <p class="muted">No DMs or group chats yet.</p>
+      <div class="empty-state">
+        <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        <h3>No conversations yet</h3>
+        <p class="muted">Start a new conversation to get started</p>
+        <a class="btn" href="{{ url_for('new_dm') }}">Start Chatting</a>
+      </div>
     {% endif %}
   </div>
 </div>
