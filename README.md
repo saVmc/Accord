@@ -2,6 +2,14 @@
 
 - [disclaimer](PLSREADME.md): citing used online resources 
 
+Details for running the app!
+
+Feel free to create your own users / play around, but here's some sample accounts to test
+I haven't populated much data (like messages between users) apart from these accounts
+TEST STUDENT USER: **student@test.com** | test 
+TEST TEACHER USER: **teacher@test.com** | test 
+
+
 ## Table of Contents!
 
 - [Part 1 – Project Definition and Requirements](#part-1--project-definition-and-requirements)
