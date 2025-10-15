@@ -1,0 +1,136 @@
+{% extends "layout.html" %}
+{% block content %}
+  <div class="page">
+    <div class="page-header">
+      <div>
+        <h1>{{ assignment[2] }}</h1>
+        <p class="muted">Due: {{ assignment[4] }}</p>
+      </div>
+      <a class="btn ghost" href="{{ url_for('class_detail', class_id=class_row[0]) }}">Back to {{ class_row[1] }}</a>
+    </div>
+
+    <div class="card">
+      <h3>Assignment Details</h3>
+      <p style="margin-top:0.5rem;">{{ assignment[3] or "No description provided." }}</p>
+    </div>
+
+    {% if user and user.role == "student" %}
+      <div class="card">
+        <h3>Your Submission</h3>
+        <div class="submission-content">
+          {% if my_submission %}
+            <div class="submission-status submitted">
+              <div class="status-header">
+                <strong>Submitted!!!</strong>
+              </div>
+              <div class="submission-details">
+                <p class="muted">Submitted on {{ my_submission[4]|sydney_time }}</p>
+                <div class="submission-actions">
+                  <a href="{{ my_submission[3] }}" class="btn ghost" target="_blank">View Your File</a>
+                </div>
+              </div>
+
+              {% if my_submission[5] %}
+                <div class="grade-display">
+                  <div class="grade-box">
+                    <span class="grade-label">Grade:</span>
+                    <span class="grade-value">{{ my_submission[6] }}</span>
+                  </div>
+                  {% if my_submission[7] %}
+                    <div class="feedback-box">
+                      <strong>Feedback:</strong>
+                      <p>{{ my_submission[7] }}</p>
+                    </div>
+                  {% endif %}
+                </div>
+              {% else %}
+                <div class="status-badge pending">
+                  Awaiting grade...
+                </div>
+              {% endif %}
+            </div>
+          {% else %}
+            <div class="submission-status not-submitted">
+              <div class="status-header">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="12" y1="8" x2="12" y2="16"></line>
+                  <line x1="8" y1="12" x2="16" y2="12"></line>
+                </svg>
+                <strong>Not Submitted</strong>
+              </div>
+              <form method="POST" action="{{ url_for('submit_assignment', assignment_id=assignment[0]) }}" enctype="multipart/form-data" class="submit-form">
+                <div class="form-group">
+                  <label for="file">Upload your file:</label>
+                  <input type="file" name="file" id="file" required class="file-input"/>
+                </div>
+                <button class="btn" type="submit">Submit Assignment</button>
+              </form>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+
+    {% if user and user.role == "teacher" %}
+      <div class="card">
+        <h3>Student Submissions ({{ submissions|length }}/{{ total_students }})</h3>
+        {% if submissions %}
+          <table style="width:100%; border-collapse:collapse; margin-top:0.8rem;">
+            <thead>
+              <tr style="border-bottom:1px solid #ccc; text-align:left;">
+                <th>Student</th>
+                <th>File</th>
+                <th>Submitted</th>
+                <th>Feedback</th>
+                <th>Grade</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for submission in submissions %}
+                <tr style="border-bottom:1px solid #eee;">
+                  <td style="padding:0.4rem 0.3rem;">
+                    {% if submission[7] %}
+                      <strong>{{ submission[7] }}</strong>
+                      {% if submission[9] %}
+                        <br>
+                        <span class="muted">{{ submission[9] }}</span>
+                      {% endif %}
+                    {% else %}
+                      <em>Unknown Student</em>
+                    {% endif %}
+                  </td>
+                  <td><a href="{{ submission[3] }}" target="_blank">Download</a></td>
+                  <td class="muted">{{ submission[4]|sydney_time }}</td>
+                  <form method="POST" action="{{ url_for('grade_submission', submission_id=submission[0]) }}">
+                    <td>
+                      <input type="text" 
+                             name="grade" 
+                             value="{{ submission[5] or '' }}" 
+                             placeholder="e.g. 9/10" 
+                             style="width:90%; padding:0.3rem; height:auto;"/>
+                    </td>
+                    <td>
+                      <textarea name="feedback" 
+                                rows="1" 
+                                style="width:70px; padding:0.3rem;"
+                                placeholder="Feedback">{{ submission[6] or '' }}</textarea>
+                    </td>
+                    <td>
+                      <button class="btn small" type="submit">
+                        {% if submission[5] %}Update{% else %}Grade{% endif %}
+                      </button>
+                    </td>
+                  </form>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        {% else %}
+          <p class="muted" style="margin-top:0.6rem;">No submissions yet.</p>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+{% endblock %}

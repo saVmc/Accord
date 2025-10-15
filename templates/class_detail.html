@@ -51,28 +51,39 @@
           {% endfor %}
         </ul>
       {% else %}
-        <p class="muted">No students enrolled yet :< its very quiet here</p>
+        <p class="muted">No students enrolled yet :< it's very quiet here...</p>
       {% endif %}
     </div>
   </div>
-  <div class="card">
-    <h3>Assignments</h3>
+<div class="card">
+  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:0.75rem;">
+    <h3 style="margin:0;">Assignments</h3>
     {% if user.role == "teacher" and user.id == class_row[3] %}
       <a class="btn ghost" href="{{ url_for('create_assignment', class_id=class_row[0]) }}">+ New Assignment</a>
     {% endif %}
-    {% if assignments %}
-      <ul>
-        {% for a in assignments %}
-          <li>
-            <a href="{{ url_for('assignment_detail', assignment_id=a[0]) }}">{{ a[2] }}</a>
-            <span class="muted"> (Due: {{ a[4] }})</span>
-          </li>
-        {% endfor %}
-      </ul>
-    {% else %}
-      <p class="muted">No assignments yet. Lucky you...</p>
-    {% endif %}
   </div>
+
+  {% if assignments %}
+    <div style="display:grid; gap:0.8rem;">
+      {% for a in assignments %}
+        <a href="{{ url_for('assignment_detail', assignment_id=a[0]) }}" 
+           class="assignment-item"
+           style="display:flex; flex-direction:column; padding:0.9rem 1rem; border-radius:0.75rem; border:1px solid #0fb9af; background:#0f2648; text-decoration:none; transition:all 0.15s ease;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.3rem;">
+            <h4 style="margin:0; font-weight:600; color:#e2e3e7;">{{ a[2] }}</h4>
+            <span style="font-size:0.8rem; background:#0f2648; color:#e2e3e7; padding:0.2rem 0.55rem; border-radius:0.5rem;">
+              Due: {{ a[4] }}
+            </span>
+          </div>
+          <p class="muted" style="margin:0; font-size:0.9rem;">Click to view details</p>
+        </a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="muted" style="margin-top:0.5rem;">No assignments yet. Lucky you...</p>
+  {% endif %}
+</div>
+
   <div class="card">
     <h3>Class Messages</h3>
     {% if enrolled %}

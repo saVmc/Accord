@@ -352,7 +352,18 @@ def get_submissions_for_assignment(assignmentID):
     con = get_connection()
     cur = con.cursor()
     cur.execute("""
-        SELECT s.*, u.name, u.avatar
+        SELECT 
+            s.submissionID, 
+            s.assignmentID, 
+            s.studentID, 
+            s.fileLink, 
+            s.submittedAt, 
+            s.grade, 
+            s.feedback,
+            u.userID,
+            u.name as student_name,
+            u.email as student_email,
+            u.avatar
         FROM submissions s
         JOIN users u ON s.studentID = u.userID
         WHERE s.assignmentID = ?

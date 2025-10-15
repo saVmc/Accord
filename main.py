@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash, send_from_directory
+from flask import Flask, render_template, request, redirect, url_for, session, flash, send_from_directory, jsonify
 import database_manager as db
 import os
 from werkzeug.utils import secure_filename
@@ -316,13 +316,16 @@ def assignment_detail(assignment_id):
         return redirect(url_for("classes"))
     c = db.get_class_by_id(assignment[1])
     submissions = db.get_submissions_for_assignment(assignment_id)
+    
+    total_students = len(db.list_students_in_class(assignment[1]))
+    
     my_submission = None
     if user and user["role"] == "student":
         my_submission = db.get_submission_by_student(assignment_id, user["id"])
     return render_template("assignment_detail.html",
                            assignment=assignment, class_row=c,
-                           submissions=submissions, my_submission=my_submission, user=user)
-
+                           submissions=submissions, my_submission=my_submission, 
+                           user=user, total_students=total_students)
 @app.route("/assignment/<int:assignment_id>/submit", methods=["POST"])
 def submit_assignment(assignment_id):
     user = logged_in_user()
@@ -470,6 +473,35 @@ def inject_unread_count():
         unread_count = db.get_unread_message_count(user["id"])
         return dict(unread_count=unread_count, now=now)
     return dict(unread_count=0, now=now)
+
+@app.route("/debug_submissions/<int:assignment_id>")
+def debug_submissions(assignment_id):
+    user = logged_in_user()
+    if not user or user["role"] != "teacher":
+        return "Not authorized"
+    
+    submissions = db.get_submissions_for_assignment(assignment_id)
+    debug_info = []
+    for i, sub in enumerate(submissions):
+        debug_info.append({
+            'index': i,
+            'tuple_length': len(sub),
+            'full_tuple': str(sub),
+            'submission_id': sub[0] if len(sub) > 0 else 'N/A',
+            'assignment_id': sub[1] if len(sub) > 1 else 'N/A',
+            'student_id': sub[2] if len(sub) > 2 else 'N/A',
+            'file_link': sub[3] if len(sub) > 3 else 'N/A',
+            'submitted_at': sub[4] if len(sub) > 4 else 'N/A',
+            'grade': sub[5] if len(sub) > 5 else 'N/A',
+            'feedback': sub[6] if len(sub) > 6 else 'N/A',
+            # These might not exist in your current query
+            'user_id': sub[7] if len(sub) > 7 else 'N/A',
+            'student_name': sub[8] if len(sub) > 8 else 'N/A',
+            'student_email': sub[9] if len(sub) > 9 else 'N/A',
+            'avatar': sub[10] if len(sub) > 10 else 'N/A'
+        })
+    
+    return jsonify(debug_info)
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
