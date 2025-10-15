@@ -1,13 +1,13 @@
 # Accord – A Social Networking App for Students
 
-- [disclaimer](PLSREADME.md): citing used online resources 
+Hi 👋 welcome to the mess of my project
 
-Details for running the app!
+- [disclaimer](PLSREADME.md): citing used online resources 
 
 Feel free to create your own users / play around, but here's some sample accounts to test
 I haven't populated much data (like messages between users) apart from these accounts
-TEST STUDENT USER: **student@test.com** | test 
-TEST TEACHER USER: **teacher@test.com** | test 
+TEST STUDENT USER: **student@test.com** | `test` 
+TEST TEACHER USER: **teacher@test.com** | `test` 
 
 
 ## Table of Contents!
@@ -17,6 +17,9 @@ TEST TEACHER USER: **teacher@test.com** | test
 - [Part 3 – Alternative Design and User Flow](#part-3--alternative-design-and-user-flow)
 - [Part 4 – Designing algorithms](#part-4---designing-algorithms)
 - [Part 5 – Setting up for the joys of SQL](#part-5--setting-up-for-the-joys-of-sql)
+- [Part 6 – CSS OVERHAUL game plan](#complete-css-overhaul-game-plan-pre-holidays)
+- [Part 7 – Weekly Logs](#weekly-logs)
+- [Short Term goals](#known-bugs-pre-submission-to-fix-by-final)
 
 
 ---
@@ -75,7 +78,7 @@ Accord helps students communicate, collaborate, and stay organized—all within 
 
 ### Developer Notes
 
-Hi 👋
+Hi again 👋
 My commits are more inconsistent than sydney trains, sorry if theres big gaps
 i literally just forget
 you've been warnedd.........
@@ -330,9 +333,75 @@ body::before {
 
 ## Weekly logs
 
+### Week 2 (28/07/2025)
+- I clearly defined the purpose of my web app and listed all functional and non-functional requirements. 
+- Outlined my 7 functional and 7 non-functional requirements for the project!  
+- Made sure the project scope was realistic and within my abilities (this will end well im sure)
+- Planned to choose the colour palette, typography, and icons, and sketch wireframes for the UI.  
+
+### Week 3 (30/07/2025)
+- I created the basic wireframes for the startup, login/signup, home screen, and timetable pages
+- Decided on a colour palette, typography, and icons that matched the overall theme
+- Ensured my wireframes were visually appealing and mostly consistent.
+- Found some inconsistencies in the timetable page colours to fix later
+- Prepared to make an alternative Figma design showing user data flow between pages
+
+### Week 4 (07/08/2025)
+- I designed an alternative layout in Figma to show how data would flow between pages
+- Updated the colour scheme to maroon/beige with a red accent and changed the font to Garamond
+- Tried to make the design sleek and simple, though I removed the bottom navigation menu which might make navigation harder
+- Noted that I only had an iPhone prototype and still needed a laptop-compatible design...
+
+### Week 5 (13/08/2025)
+- I created a login algorithm in English and as a flowchart.  
+- Completed 4 test cases for the login functionality.  
+- Realised the algorithm didn’t handle new users yet, so there’s definitely room for improvement T-T  
+- Set up my development environment and started working on the SQL backend
+- Began inputting test data and running basic SQL searches to check functionality.  
+
+### Week 6 (25/08/2025)
+- I successfully set up the SQL database with multiple tables and queries.  
+- Populated initial test data and verified it worked as expected.  
+- Found gaps in my backend, only 10 lines of data, students limited to one subject, and no teacher timetable yet.  
+- Started designing webpage layouts in HTML and linking them to the backend.  
+- Styled the pages using CSS to get a consistent look for the app.  
+
+### Week 7 (04/09/2025)
+- My web application was running with multiple functional webpages!!!
+- I completed user sign-up, login, and class creation features  
+- Frontend and backend were successfully connected :D
+- Noticed some areas could look better: bigger text and filling empty spaces.  
+- Fixed the ‘creating classes’ function and enhanced CSS formatting to improve the general 'look'  
+
+### Week 8 (10/09/2025)
+- I finished styling the webpages using HTML and CSS, making them visually pleasing :]
+- Implemented key functionalities like user sign-up/login, class creation, and adding information.  
+- Realised some areas weren’t complete yet: settings page, top bar formatting, and class timetabling notifications.  
+- Planned finishing touches for functionality and design alignment.  
+- Tweaked the design to move away from the basic tutorial template while keeping it functional.  
+
+### Week 9 (18/09/2025)
+- I fixed most of the functionalities from the previous week; backend-to-frontend data now works in most areas.  
+- Ran Lighthouse reports: scored 90+ on most pages but lower on pages with more features.  
+- Noticed issues like settings page not showing data, class messages formatting inconsistencies, and timezone errors.  
+- Planned to add more functionality, like replying to class messages.  
+- time management with exams D:  
+
+### Week 10 (25/09/2025)
+- I added interactive elements! login, posting classes, and commenting on classes.  
+- The web app is working well and is enjoyable to use :>   
+- Planned to run previous test cases to check that all features are working.
+
 
 
 ## Known Bugs (pre submission to fix by final)
-- Database lock errors when editing class 
-- Random CSS inconsitencies and visual bugs 
+- Database lock errors when editing class
+  Not fixed
+- Random CSS inconsitencies and visual bugs
+  Not fixed
 - Button overlaps and incorrect hover animations
+  Semi fixed...
+- Submissions being completely broken
+  Fixed
+- Cleaning up project for submission
+  Done!
