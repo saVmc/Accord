@@ -27,6 +27,8 @@ def get_connection():
     con.execute("PRAGMA foreign_keys = ON;")
     return con
 
+### Init database! Makes tables if they don't exist, and makes sure nothing breaks if you wipe database
+
 def init_db():
     con = get_connection()
     cur = con.cursor()

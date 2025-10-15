@@ -68,8 +68,9 @@ Accord helps students communicate, collaborate, and stay organized—all within 
 ### Developer Notes
 
 Hi 👋
-My commits are incredibly inconsistent. I just forget....
-You have been warned........
+My commits are more inconsistent than sydney trains, sorry if theres big gaps
+i literally just forget
+you've been warnedd.........
 ---
 
 ## Part 2 – Design and Wireframes
