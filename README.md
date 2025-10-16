@@ -1,14 +1,6 @@
 # Accord – A Social Networking App for Students
 
-Hi 👋 welcome to the mess of my project
-
-- [disclaimer](PLSREADME.md): citing used online resources 
-
-Feel free to create your own users / play around, but here's some sample accounts to test
-I haven't populated much data (like messages between users) apart from these accounts
-TEST STUDENT USER: **student@test.com** | `test` 
-TEST TEACHER USER: **teacher@test.com** | `test` 
-
+Hi 👋 welcome to the mess of my project! 
 
 ## Table of Contents!
 
@@ -331,7 +323,7 @@ body::before {
 
 
 
-## Weekly logs
+## Weekly logs (my commits weren't consistent enough)
 
 ### Week 2 (28/07/2025)
 - I clearly defined the purpose of my web app and listed all functional and non-functional requirements. 
@@ -405,3 +397,31 @@ body::before {
   Fixed
 - Cleaning up project for submission
   Done!
+
+## How to run + citing online sources
+
+- [disclaimer](citing_resources.md): citing used online resources 
+
+Feel free to create your own users / play around, but here's some sample accounts to test
+I haven't populated much data (like messages between users) apart from these accounts!
+--
+TEST STUDENT USER: **student@test.com** | `test` 
+TEST TEACHER USER: **teacher@test.com** | `test` 
+--
+
+1. Download the repository and import into VSC
+2. In a Bash terminal, run this command
+```bash
+py main.py
+```
+3. In a web browser, open the default gateway for the flask server, listed in the console but defaults to `http://127.0.0.1:5000` or `http://10.177.11.160:5000`
+4. You're in! :) have fun playing around with
+   - Settings
+   - Direct Messages / Group chats
+   - Assignments / Grading
+   - Teacher / Student accounts
+   - Classrooms + Customisation
+   - Image intergration
+   - Class chats
+   - Very cool fancy CSS that i did too much for
+   - more i'm sure I've forgotten about
